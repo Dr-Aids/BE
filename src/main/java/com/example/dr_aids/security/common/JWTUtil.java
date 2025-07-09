@@ -1,4 +1,4 @@
-package com.example.dr_aids.user.common;
+package com.example.dr_aids.security.common;
 
 
 import io.jsonwebtoken.Jwts;
