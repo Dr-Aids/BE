@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dr_aids?serverTimezone=Asia/Seoul
+    username: aids
+    password: draids0406!
+
+jpa:
+  hibernate:
+    ddl-auto: update
+  properties:
+    hibernate:
+      show_sql: true
+      format_sql: true
+
+springdoc:
+  swagger-ui:
+    doc-expansion: none # swagger-ui?? API ??? ?? ?? ??, none? ?? API? ?? ? ??
+    groups-order: DESC # path, query, body, response ??? ??
+    tags-sorter: alpha # ??? ??? ??? ??
+    operations-sorter: method  # delete - get - patch - post - put ??? ??, alpha? ???? ??? ??? ?? ??
