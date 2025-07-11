@@ -1,4 +1,4 @@
-package com.example.dr_aids.security.domain;
+package com.example.dr_aids.user.domain;
 
 import lombok.Getter;
 import lombok.Setter;

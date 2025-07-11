@@ -2,7 +2,7 @@ package com.example.dr_aids.security.filter;
 
 import com.example.dr_aids.security.common.CustomUserDetails;
 import com.example.dr_aids.security.common.JWTUtil;
-import com.example.dr_aids.security.domain.LoginDTO;
+import com.example.dr_aids.user.domain.LoginDTO;
 import com.example.dr_aids.security.domain.RefreshToken;
 import com.example.dr_aids.security.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,6 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
