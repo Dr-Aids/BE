@@ -2,12 +2,14 @@ package com.example.dr_aids.security.common;
 
 
 import com.example.dr_aids.user.domain.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
 public class CustomUserDetails implements UserDetails { // CustomUserDetails는 UserDetails 인터페이스를 구현하여 Spring Security에서 사용자 정보를 담는 클래스입니다.
     private final User user;
     public CustomUserDetails(User user) {
@@ -28,9 +30,6 @@ public class CustomUserDetails implements UserDetails { // CustomUserDetails는 
         return authorities;
     }
 
-    public User getUser(){
-        return user;
-    }
     @Override
     public String getPassword() {
 

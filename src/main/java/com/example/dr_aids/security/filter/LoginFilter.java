@@ -66,20 +66,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
+        log.info("로그인 성공, access token 발급 시작");
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String username = customUserDetails.getUsername();
 
+        ;
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
+        log.info("username: {}, role: {}", username, role);
         String email = customUserDetails.getEmail();
         String access = jwtUtil.createJwt("access", username, role, email, 7200000L); // 2 hours in milliseconds
         String refresh = jwtUtil.createJwt("refresh", username, role, email, 604800000L); // 7 days in milliseconds
 
         addRefreshEntity(username, refresh, 604800000L); // 7 days in milliseconds
+
 
         //응답 설정
         response.setHeader("access", access);
