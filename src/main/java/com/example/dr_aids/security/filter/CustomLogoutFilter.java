@@ -20,9 +20,9 @@ public class CustomLogoutFilter extends GenericFilterBean {
     private final RefreshTokenRepository refreshRepository;
 
     public CustomLogoutFilter(JWTUtil jwtUtil, RefreshTokenRepository refreshRepository) {
-
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+
     }
 
     @Override
