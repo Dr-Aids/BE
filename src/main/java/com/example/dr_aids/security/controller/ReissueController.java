@@ -6,6 +6,12 @@ import com.example.dr_aids.security.domain.RefreshToken;
 import com.example.dr_aids.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,13 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.Map;
 
+@Tag(name = "Token Reissue", description = "토큰 재발급 API")
 @RestController
 @RequestMapping("/reissue")
 @Slf4j
 public class ReissueController {
 
     private final JWTUtil jwtUtil;
-    private final RefreshTokenRepository refreshTokenRepository
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final long ACCESS_TOKEN_EXP = 7200000L; // 2시간
     private final long REFRESH_TOKEN_EXP = 604800000L; // 7일
@@ -35,9 +42,38 @@ public class ReissueController {
         this.refreshTokenRepository = refreshRepository;
     }
 
-    /**
-     * Refresh 토큰을 이용한 Access 토큰 재발급
-     */
+    @Operation(
+            summary = "Access/Refresh 토큰 재발급",
+            description = "Refresh 토큰을 쿠키로 받아 새로운 Access 토큰과 Refresh 토큰을 발급합니다.\n\n" +
+                    "※ 기존 Refresh 토큰은 폐기되며 새 Refresh 토큰은 쿠키로 다시 저장됩니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "토큰 재발급 성공",
+                    content = @Content(schema = @Schema(
+                            example = "{\"code\": \"S001\", \"message\": \"New tokens issued\"}"
+                    ))
+            ),
+            @ApiResponse(responseCode = "400", description = "쿠키에 Refresh 토큰 없음",
+                    content = @Content(schema = @Schema(
+                            example = "{\"code\": \"E001\", \"error\": \"Refresh token not found in cookies\"}"
+                    ))
+            ),
+            @ApiResponse(responseCode = "401", description = "유효하지 않거나 만료된 토큰",
+                    content = @Content(schema = @Schema(
+                            example = "{\"code\": \"E002\", \"error\": \"Refresh token expired\"}"
+                    ))
+            ),
+            @ApiResponse(responseCode = "401", description = "토큰이 Refresh 토큰이 아님",
+                    content = @Content(schema = @Schema(
+                            example = "{\"code\": \"E004\", \"error\": \"Token is not a refresh token\"}"
+                    ))
+            ),
+            @ApiResponse(responseCode = "401", description = "DB에 Refresh 토큰이 존재하지 않음",
+                    content = @Content(schema = @Schema(
+                            example = "{\"code\": \"E005\", \"error\": \"Refresh token not found in DB\"}"
+                    ))
+            )
+    })
     @PostMapping
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
 
