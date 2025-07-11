@@ -25,6 +25,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
+
+    @Column(nullable = false)
+    private String hospitalName = "기본병원";
+
     @Column(nullable = false, unique = false)
     private String username;
 

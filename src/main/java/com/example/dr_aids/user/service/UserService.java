@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User updateUser(User user, UserUpdateDTO requestDTO) {
+    public void updateUser(User user, UserUpdateDTO requestDTO) {
 
         // 수정할 필드만 반영 (null인 건 무시할 수도 있음)
         if (requestDTO.getUsername() != null) {
@@ -20,7 +20,10 @@ public class UserService {
         if (requestDTO.getRole() != null) {
             user.setRole(Role.valueOf(requestDTO.getRole()));
         }
+        if (requestDTO.getHospitalName() != null) {
+            user.setHospitalName(requestDTO.getHospitalName());
+        }
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 }
