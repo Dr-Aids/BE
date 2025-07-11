@@ -1,5 +1,6 @@
 package com.example.dr_aids.user.service;
 
+import com.example.dr_aids.user.domain.Role;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.domain.UserUpdateDTO;
 import com.example.dr_aids.user.repository.UserRepository;
@@ -16,8 +17,8 @@ public class UserService {
         if (requestDTO.getUsername() != null) {
             user.setUsername(requestDTO.getUsername());
         }
-        if (requestDTO.getEmail() != null) {
-            user.setEmail(requestDTO.getEmail());
+        if (requestDTO.getRole() != null) {
+            user.setRole(Role.valueOf(requestDTO.getRole()));
         }
 
         return userRepository.save(user);
