@@ -5,17 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.annotation.Primary;
 
+@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Weight extends BaseEntity {
 
     @Id
@@ -25,7 +23,6 @@ public class Weight extends BaseEntity {
     private Double preWeight;
     private Double postWeight;
     private Double dryWeight;
-
     private Double targetUF;
 
     //회차 매핑
