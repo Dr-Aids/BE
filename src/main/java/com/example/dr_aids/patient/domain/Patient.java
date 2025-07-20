@@ -1,10 +1,13 @@
 package com.example.dr_aids.patient.domain;
 
+import com.example.dr_aids.dialysisSession.domain.DialysisSession;
 import com.example.dr_aids.util.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Entity
@@ -35,6 +38,9 @@ public class Patient extends BaseEntity {
     private Double averageWeightGain;
     private Double averageWeight;
     private Boolean visiting;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DialysisSession> dialysisSessions = new ArrayList<>();
 
 
 }

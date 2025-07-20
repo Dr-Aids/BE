@@ -1,4 +1,4 @@
-package com.example.dr_aids.weight.domain;
+package com.example.dr_aids.bloodpressure.domain;
 
 import com.example.dr_aids.util.BaseEntity;
 import jakarta.persistence.Entity;
@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.context.annotation.Primary;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Builder
 @Entity
@@ -14,16 +16,19 @@ import org.springframework.context.annotation.Primary;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Weight extends BaseEntity {
+public class BloodPressure extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double preWeight;
-    private Double postWeight;
-    private Double dryWeight;
-    private Double targetUF;
-    
+    private Long SBP; // Systolic Blood Pressure
+    private Long DBP; // Diastolic Blood Pressure
+
+    //측정 시간
+    private LocalDateTime measurementTime;
+
+    private String note;
+    private String writer;
 
 }
