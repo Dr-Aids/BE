@@ -30,5 +30,5 @@ public class BloodPressure extends BaseEntity {
 
     private String note;
     private String writer;
-
+    private Boolean isChecked; // true: checked, false: unchecked
 }

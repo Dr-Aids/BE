@@ -24,6 +24,7 @@ public class Weight extends BaseEntity {
     private Double postWeight;
     private Double dryWeight;
     private Double targetUF;
-    
+    private Double controlUF;
+
 
 }
