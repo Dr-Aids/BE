@@ -1,5 +1,6 @@
 package com.example.dr_aids.user.domain;
 
+import com.example.dr_aids.hospital.domain.Hospital;
 import com.example.dr_aids.util.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,9 +26,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-
-    @Column(nullable = false)
-    private String hospitalName = "기본병원";
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
 
     @Column(nullable = false, unique = false)
     private String username;

@@ -2,11 +2,11 @@ package com.example.dr_aids.patient.service;
 
 import com.example.dr_aids.assignment.domain.Assignment;
 import com.example.dr_aids.assignment.repository.AssignmentRepository;
+import com.example.dr_aids.dialysisSession.domain.DialysisSession;
 import com.example.dr_aids.exception.CustomException;
 import com.example.dr_aids.exception.ErrorCode;
-import com.example.dr_aids.patient.domain.Patient;
-import com.example.dr_aids.patient.domain.PatientInfoRequestDto;
-import com.example.dr_aids.patient.domain.PatientInfoResponseDto;
+import com.example.dr_aids.hospital.domain.Hospital;
+import com.example.dr_aids.patient.domain.*;
 import com.example.dr_aids.patient.repository.PatientRepository;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -119,6 +120,45 @@ public class PatientService {
                 .PIC(doctorName)
                 .build();
     }
+
+    public List<PatientListResponseDto> getPatientListByHospital(User user){
+        Hospital hospital = user.getHospital();
+        List<Patient> patients = patientRepository.findPatientsByHospitalName(hospital.getHospitalName());
+
+        if (patients == null || patients.isEmpty()) {
+            throw new CustomException(ErrorCode.PATIENT_NOT_FOUND);
+        }
+
+        return patients.stream()
+                .map(patient -> PatientListResponseDto.builder()
+                        .id(patient.getId())
+                        .name(patient.getName())
+                        .gender(patient.getGender())
+                        .age(patient.getAge())
+                        .birth(patient.getBirth())
+                        .visiting(patient.getVisiting())
+                        .build())
+                .toList();
+    }
+
+    public List<PatientSessionInfoResponseDto> getPatientDialysisSessionInfo(Long id){
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+
+        List<DialysisSession> dialysisSessions = patient.getDialysisSessions();
+
+        if (dialysisSessions == null || dialysisSessions.isEmpty()) {
+            throw new CustomException(ErrorCode.SESSION_NOT_FOUND);
+        }
+
+        return dialysisSessions.stream()
+                .map(session -> PatientSessionInfoResponseDto.builder()
+                        .session(session.getSession())
+                        .date(session.getDate())
+                        .build())
+                .toList();
+    }
+
 
 
 }

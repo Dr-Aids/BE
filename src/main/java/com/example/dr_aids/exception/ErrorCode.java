@@ -18,9 +18,11 @@ public enum ErrorCode {
 
     // 환자 관련 오류
     PATIENT_NOT_FOUND(HttpStatus.NOT_FOUND, "환자를 찾을 수 없습니다"),
+    SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "세션을 찾을 수 없습니다"),
 
-    // 의사 관련 오류
+    // 의사 관련 오류,
     DOCTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "의사를 찾을 수 없습니다");
+
 
     private final String message;
     private final int status;
