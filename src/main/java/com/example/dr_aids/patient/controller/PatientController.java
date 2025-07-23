@@ -58,12 +58,4 @@ public class PatientController {
         patientService.updatePatientVisitingStatus(id, patientVisitindRequestDto);
         return ResponseEntity.ok("환자 방문 여부가 수정되었습니다.");
     }
-    @GetMapping("/info/session/{id}") // 환자의 투석 회차 조회
-    public ResponseEntity<?> getPatientDialysisSessionInfo(@PathVariable Long id) {
-        return ResponseEntity.ok(patientService.getPatientDialysisSessionInfo(id));
-    }
-
-
-
-
 }

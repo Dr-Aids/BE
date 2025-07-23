@@ -29,6 +29,6 @@ public class BloodPressure extends BaseEntity {
     private LocalDateTime measurementTime;
 
     private String note;
-    private String writer;
+    private String author;
     private Boolean isChecked; // true: checked, false: unchecked
 }

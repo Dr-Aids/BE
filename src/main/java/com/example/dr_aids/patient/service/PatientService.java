@@ -2,7 +2,7 @@ package com.example.dr_aids.patient.service;
 
 import com.example.dr_aids.assignment.domain.Assignment;
 import com.example.dr_aids.assignment.repository.AssignmentRepository;
-import com.example.dr_aids.dialysisSession.domain.DialysisSession;
+
 import com.example.dr_aids.exception.CustomException;
 import com.example.dr_aids.exception.ErrorCode;
 import com.example.dr_aids.hospital.domain.Hospital;
@@ -11,7 +11,6 @@ import com.example.dr_aids.patient.domain.requestDto.PatientInfoRequestDto;
 import com.example.dr_aids.patient.domain.requestDto.PatientVisitindRequestDto;
 import com.example.dr_aids.patient.domain.responseDto.PatientInfoResponseDto;
 import com.example.dr_aids.patient.domain.responseDto.PatientListResponseDto;
-import com.example.dr_aids.patient.domain.responseDto.PatientSessionInfoResponseDto;
 import com.example.dr_aids.patient.repository.PatientRepository;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
@@ -27,6 +26,7 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final AssignmentRepository assignmentRepository;
+
 
     // 환자 정보를 저장하는 메소드
     public void savePatientInfo(PatientInfoRequestDto patientInfoRequestDto) {
@@ -150,26 +150,5 @@ public class PatientService {
         patient.setVisiting(patientVisitindRequestDto.getVisiting());
         patientRepository.save(patient);
     }
-    public List<PatientSessionInfoResponseDto> getPatientDialysisSessionInfo(Long id){
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
-
-        List<DialysisSession> dialysisSessions = patient.getDialysisSessions();
-
-        if (dialysisSessions == null || dialysisSessions.isEmpty()) {
-            throw new CustomException(ErrorCode.SESSION_NOT_FOUND);
-        }
-
-        return dialysisSessions.stream()
-                .map(session -> PatientSessionInfoResponseDto.builder()
-                        .session(session.getSession())
-                        .date(session.getDate())
-                        .build())
-                .toList();
-    }
-
-
-
-
 
 }

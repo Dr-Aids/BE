@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class PatientSessionInfoResponseDto {
+public class SessionInfoResponseDto {
     private Long session; //세션 회차
     private LocalDate date; //세션 날짜
 }
