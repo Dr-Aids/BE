@@ -21,20 +21,24 @@ public class PatientController {
     public ResponseEntity<?> savePatientInfo(@RequestBody PatientInfoRequestDto patientInfoRequestDto) {
 
         patientService.savePatientInfo(patientInfoRequestDto);
-        return ResponseEntity.ok("Patient information saved successfully");
+        return ResponseEntity.ok("환자 정보가 저장되었습니다.");
     }
 
     @PutMapping("/info/{id}")
     public ResponseEntity<?> updatePatientInfo(@PathVariable Long id, @RequestBody PatientInfoRequestDto patientInfoRequestDto) {
         patientService.updatePatientInfo(id, patientInfoRequestDto);
-        return ResponseEntity.ok("Patient information updated successfully");
+        return ResponseEntity.ok("환자 정보가 수정되었습니다.");
     }
 
     @DeleteMapping("/info/{id}")
     public ResponseEntity<?> deletePatientInfo(@PathVariable Long id) {
         patientService.deletePatientInfo(id);
-        return ResponseEntity.ok("Patient information deleted successfully");
+        return ResponseEntity.ok("환자 삭제가 완료되었습니다.");
     }
 
+    @GetMapping("/info/{id}")
+    public ResponseEntity<?> getPatientInfo(@PathVariable Long id) {
+        return ResponseEntity.ok(patientService.getPatientInfo(id));
+    }
 
 }

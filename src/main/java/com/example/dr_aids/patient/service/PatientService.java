@@ -6,11 +6,13 @@ import com.example.dr_aids.exception.CustomException;
 import com.example.dr_aids.exception.ErrorCode;
 import com.example.dr_aids.patient.domain.Patient;
 import com.example.dr_aids.patient.domain.PatientInfoRequestDto;
+import com.example.dr_aids.patient.domain.PatientInfoResponseDto;
 import com.example.dr_aids.patient.repository.PatientRepository;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +27,9 @@ public class PatientService {
     // 환자 정보를 저장하는 메소드
     public void savePatientInfo(PatientInfoRequestDto patientInfoRequestDto) {
 
+        User doctor = userRepository.findByUsername(patientInfoRequestDto.getPIC())
+                .orElseThrow(()-> new CustomException(ErrorCode.DOCTOR_NOT_FOUND)); // 담당의사 설정, 의사가 없을시 오류
+
         Patient patient = Patient.builder()
                 .name(patientInfoRequestDto.getName())
                 .age(patientInfoRequestDto.getAge())
@@ -34,16 +39,12 @@ public class PatientService {
                 .build();
         patientRepository.save(patient);
 
-        User doctor = userRepository.findByUsername(patientInfoRequestDto.getPIC())
-                .orElseThrow(()-> new CustomException(ErrorCode.DOCTOR_NOT_FOUND)); // 담당의사 설정, PIC가 null일 경우 무
-
         Assignment assignment = Assignment.builder()
                 .patient(patient)
                 .doctor(doctor)
                 .build();
 
         assignmentRepository.save(assignment);
-
     }
 
     public void updatePatientInfo(Long id, PatientInfoRequestDto patientInfoRequestDto) {
@@ -101,5 +102,23 @@ public class PatientService {
             assignmentRepository.delete(assignment);
         }
     }
+
+    public PatientInfoResponseDto getPatientInfo(Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+        Optional<Assignment> assignmentOptional = assignmentRepository.findByPatientId(id);
+        String doctorName = assignmentOptional.map(assignment -> assignment.getDoctor().getUsername())
+                .orElse(null);
+        return PatientInfoResponseDto.builder()
+                .id(id)
+                .name(patient.getName())
+                .age(patient.getAge())
+                .disease(patient.getDisease())
+                .birth(patient.getBirth())
+                .gender(patient.getGender())
+                .PIC(doctorName)
+                .build();
+    }
+
 
 }
