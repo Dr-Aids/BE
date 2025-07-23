@@ -6,6 +6,5 @@ import lombok.Data;
 public class UserUpdateDTO {
     private String username;
     private String role;
-    private String hospitalName;
 }
 
