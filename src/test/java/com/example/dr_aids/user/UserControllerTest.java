@@ -48,7 +48,6 @@ class UserControllerTest {
         user.setRole(Role.valueOf("DOCTOR"));
         user.setUsername("testuser");
         user.setEmail("test@example.com");
-        user.setHospitalName("Test Hospital");
 
         customUserDetails = new CustomUserDetails(user);
         UsernamePasswordAuthenticationToken auth =
@@ -71,7 +70,6 @@ class UserControllerTest {
         UserUpdateDTO dto = new UserUpdateDTO();
         dto.setUsername("newname");
         dto.setRole("newemail@example.com");
-        dto.setHospitalName("New Hospital");
 
         doNothing().when(userService).updateUser(Mockito.any(), Mockito.any());
 

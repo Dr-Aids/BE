@@ -1,5 +1,6 @@
 package com.example.dr_aids.patient.controller;
 
+import com.example.dr_aids.patient.docs.PatientControllerDocs;
 import com.example.dr_aids.patient.domain.requestDto.PatientInfoRequestDto;
 import com.example.dr_aids.patient.domain.requestDto.PatientVisitindRequestDto;
 import com.example.dr_aids.patient.service.PatientService;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequestMapping("/patient")
-public class PatientController {
+public class PatientController implements PatientControllerDocs {
 
     private final PatientService patientService;
 

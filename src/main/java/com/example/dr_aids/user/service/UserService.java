@@ -20,9 +20,6 @@ public class UserService {
         if (requestDTO.getRole() != null) {
             user.setRole(Role.valueOf(requestDTO.getRole()));
         }
-        if (requestDTO.getHospitalName() != null) {
-            user.setHospitalName(requestDTO.getHospitalName());
-        }
 
         userRepository.save(user);
     }
