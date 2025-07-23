@@ -1,6 +1,7 @@
 package com.example.dr_aids.patient.controller;
 
-import com.example.dr_aids.patient.domain.PatientInfoRequestDto;
+import com.example.dr_aids.patient.domain.requestDto.PatientInfoRequestDto;
+import com.example.dr_aids.patient.domain.requestDto.PatientVisitindRequestDto;
 import com.example.dr_aids.patient.service.PatientService;
 import com.example.dr_aids.security.common.CustomUserDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,10 +53,17 @@ public class PatientController {
         return ResponseEntity.ok(patientService.getPatientListByHospital(userDetails.getUser()));
     }
 
+    @PutMapping("/info/visiting/{id}") // 환자 방문 여부 수정
+    public ResponseEntity<?> updatePatientVisitingStatus(@PathVariable Long id, @RequestBody PatientVisitindRequestDto patientVisitindRequestDto) {
+        patientService.updatePatientVisitingStatus(id, patientVisitindRequestDto);
+        return ResponseEntity.ok("환자 방문 여부가 수정되었습니다.");
+    }
     @GetMapping("/info/session/{id}") // 환자의 투석 회차 조회
     public ResponseEntity<?> getPatientDialysisSessionInfo(@PathVariable Long id) {
         return ResponseEntity.ok(patientService.getPatientDialysisSessionInfo(id));
     }
+
+
 
 
 }

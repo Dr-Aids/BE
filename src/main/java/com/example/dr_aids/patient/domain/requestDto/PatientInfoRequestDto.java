@@ -1,4 +1,4 @@
-package com.example.dr_aids.patient.domain;
+package com.example.dr_aids.patient.domain.requestDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

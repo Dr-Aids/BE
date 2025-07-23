@@ -7,15 +7,18 @@ import com.example.dr_aids.exception.CustomException;
 import com.example.dr_aids.exception.ErrorCode;
 import com.example.dr_aids.hospital.domain.Hospital;
 import com.example.dr_aids.patient.domain.*;
+import com.example.dr_aids.patient.domain.requestDto.PatientInfoRequestDto;
+import com.example.dr_aids.patient.domain.requestDto.PatientVisitindRequestDto;
+import com.example.dr_aids.patient.domain.responseDto.PatientInfoResponseDto;
+import com.example.dr_aids.patient.domain.responseDto.PatientListResponseDto;
+import com.example.dr_aids.patient.domain.responseDto.PatientSessionInfoResponseDto;
 import com.example.dr_aids.patient.repository.PatientRepository;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -141,6 +144,12 @@ public class PatientService {
                 .toList();
     }
 
+    public void updatePatientVisitingStatus(Long id, PatientVisitindRequestDto patientVisitindRequestDto) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+        patient.setVisiting(patientVisitindRequestDto.getVisiting());
+        patientRepository.save(patient);
+    }
     public List<PatientSessionInfoResponseDto> getPatientDialysisSessionInfo(Long id){
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
@@ -158,6 +167,8 @@ public class PatientService {
                         .build())
                 .toList();
     }
+
+
 
 
 
