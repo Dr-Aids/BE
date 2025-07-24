@@ -4,6 +4,8 @@ import com.example.dr_aids.bloodpressure.domain.BloodPressure;
 import com.example.dr_aids.bloodpressure.domain.BloodPressureDto;
 import com.example.dr_aids.bloodpressure.domain.BloodPressureNoteDto;
 import com.example.dr_aids.dialysisSession.domain.DialysisSession;
+import com.example.dr_aids.dialysisSession.domain.SessionSaveRequestDto;
+import com.example.dr_aids.dialysisSession.repository.DialysisSessionRepository;
 import com.example.dr_aids.exception.CustomException;
 import com.example.dr_aids.exception.ErrorCode;
 import com.example.dr_aids.patient.domain.Patient;
@@ -24,6 +26,37 @@ import java.util.List;
 @AllArgsConstructor
 public class DialysisSessionService {
     private final PatientRepository patientRepository;
+    private final DialysisSessionRepository dialysisSessionRepository;
+
+    public void addDialysisSessionInfo(SessionSaveRequestDto sessionSaveRequestDto) {
+        Patient patient = patientRepository.findById(sessionSaveRequestDto.getPatientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+
+        // 현재 환자의 투석 회차 수를 기반으로 다음 회차 번호 생성
+        Long session = (long) patient.getDialysisSessions().size() + 1;
+
+        // 새로운 DialysisSession 객체 생성
+        DialysisSession dialysisSession = DialysisSession.builder()
+                .session(session)
+                .date(sessionSaveRequestDto.getDate())
+                .patient(patient)
+                .build();
+
+        // 몸무게 정보 설정
+        Weight weight = Weight.builder()
+                .preWeight(sessionSaveRequestDto.getPreWeight())
+                .dryWeight(sessionSaveRequestDto.getDryWeight())
+                .targetUF(sessionSaveRequestDto.getTargetUF())
+                .build();
+
+        // 몸무게 정보와 DialysisSession 연결
+        dialysisSession.setWeight(weight);
+        patient.getDialysisSessions().add(dialysisSession);
+
+        // 평균 체중 계산 및 환자 정보 업데이트
+        patientRepository.save(patient);
+        dialysisSessionRepository.save(dialysisSession);
+    }
     public List<SessionInfoResponseDto> getDialysisSessionInfo(Long id){
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));

@@ -3,6 +3,7 @@ package com.example.dr_aids.user.controller;
 import com.example.dr_aids.security.common.CustomUserDetails;
 import com.example.dr_aids.user.docs.UserControllerDocs;
 import com.example.dr_aids.user.domain.User;
+import com.example.dr_aids.user.domain.UserInfoResponseDto;
 import com.example.dr_aids.user.domain.UserUpdateDTO;
 import com.example.dr_aids.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,12 +31,13 @@ public class UserController implements UserControllerDocs {
     public ResponseEntity<?> userinfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
 
         if(!isValidUser(userDetails)) {
-            log.error("User details not found");
-            return ResponseEntity.badRequest().body("User details not found");
+            log.error("잘못된 사용자입니다.");
+            return ResponseEntity.badRequest().body("잘못된 사용자입니다.");
         }
-        log.info(userDetails.getUser().getEmail());
+
+        UserInfoResponseDto responseDto = userService.getUserInfo(userDetails.getUser());
         // 사용자 정보 반환
-        return ResponseEntity.ok(userDetails);
+        return ResponseEntity.ok(responseDto);
     }
 
     @Override
@@ -43,15 +45,15 @@ public class UserController implements UserControllerDocs {
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserUpdateDTO requestDTO) {
         // 사용자 정보 업데이트 로직 구현
         if(!isValidUser(userDetails)) {
-            log.error("User details not found");
-            return ResponseEntity.badRequest().body("User details not found");
+            log.error("잘못된 사용자입니다.");
+            return ResponseEntity.badRequest().body("잘못된 사용자입니다.");
         }
 
         userService.updateUser(userDetails.getUser(), requestDTO);
 
         log.info("Updating user: {}", userDetails.getUser().getEmail());
-        // 예시로 사용자 정보를 그대로 반환
-        return ResponseEntity.ok(userDetails);
+
+        return ResponseEntity.ok( "사용자 정보 수정이 완료되었습니다.");
     }
 
 

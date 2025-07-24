@@ -1,5 +1,6 @@
 package com.example.dr_aids.weight.controller;
 
+import com.example.dr_aids.weight.docs.WeightControllerDocs;
 import com.example.dr_aids.weight.domain.requestDto.WeightRequestDto;
 import com.example.dr_aids.weight.service.WeightService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Tag(name = "Weight", description = "체중 관련 API")
 @RequestMapping("/weight")
-public class WeightController {
+public class WeightController implements WeightControllerDocs {
 
     private final WeightService weightService;
 
