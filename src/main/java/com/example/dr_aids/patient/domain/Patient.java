@@ -37,9 +37,7 @@ public class Patient extends BaseEntity {
     @Column(nullable = false)
     private String disease;
 
-    private Double averageWeightGain;
     private Double averageWeight;
-
 
     private Boolean visiting = false;
 

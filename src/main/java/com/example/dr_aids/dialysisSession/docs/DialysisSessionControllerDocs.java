@@ -2,8 +2,8 @@ package com.example.dr_aids.dialysisSession.docs;
 
 import com.example.dr_aids.dialysisSession.domain.SessionDetailRequestDto;
 import com.example.dr_aids.patient.domain.responseDto.SessionInfoResponseDto;
-import com.example.dr_aids.weight.domain.WeightDetailDto;
-import com.example.dr_aids.weight.domain.WeightTrendDto;
+import com.example.dr_aids.weight.domain.responseDto.WeightDetailDto;
+import com.example.dr_aids.weight.domain.responseDto.WeightTrendDto;
 import com.example.dr_aids.bloodpressure.domain.BloodPressureDto;
 import com.example.dr_aids.bloodpressure.domain.BloodPressureNoteDto;
 import io.swagger.v3.oas.annotations.Operation;

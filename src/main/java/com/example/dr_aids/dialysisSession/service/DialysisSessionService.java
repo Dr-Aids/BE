@@ -11,8 +11,8 @@ import com.example.dr_aids.dialysisSession.domain.SessionDetailRequestDto;
 import com.example.dr_aids.patient.domain.responseDto.SessionInfoResponseDto;
 import com.example.dr_aids.patient.repository.PatientRepository;
 import com.example.dr_aids.weight.domain.Weight;
-import com.example.dr_aids.weight.domain.WeightDetailDto;
-import com.example.dr_aids.weight.domain.WeightTrendDto;
+import com.example.dr_aids.weight.domain.responseDto.WeightDetailDto;
+import com.example.dr_aids.weight.domain.responseDto.WeightTrendDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
