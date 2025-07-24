@@ -10,6 +10,8 @@ import com.example.dr_aids.weight.repository.WeightRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+
 @AllArgsConstructor
 @Service
 public class WeightService {
@@ -26,11 +28,6 @@ public class WeightService {
                 .findByPatientIdAndSession(patient.getId(), requestDto.getSession())
                 .orElseThrow(() -> new IllegalArgumentException("해당 세션을 찾을 수 없습니다."));
 
-        // ✅ 평균 체중 계산
-        Double averageWeight = patient.getAverageWeight() !=  null ?
-                (patient.getAverageWeight() + requestDto.getPreWeight()) / 2 : requestDto.getPreWeight();
-        patient.setAverageWeight(averageWeight);
-
         Weight weight = session.getWeight();
 
         if (weight == null) {
@@ -44,17 +41,32 @@ public class WeightService {
                     .build();
         } else {
             // ✅ 기존 Weight 수정
-            weight.setPreWeight(requestDto.getPreWeight());
-            weight.setPostWeight(requestDto.getPostWeight());
-            weight.setDryWeight(requestDto.getDryWeight());
-            weight.setTargetUF(requestDto.getTargetUF());
-            weight.setControlUF(requestDto.getControlUF());
+            weight.setPreWeight(requestDto.getPreWeight() != null ? requestDto.getPreWeight() : weight.getPreWeight());
+            weight.setPostWeight(requestDto.getPostWeight() != null ? requestDto.getPostWeight() : weight.getPostWeight());
+            weight.setDryWeight(requestDto.getDryWeight() != null ? requestDto.getDryWeight() : weight.getDryWeight());
+            weight.setTargetUF(requestDto.getTargetUF() != null ? requestDto.getTargetUF() : weight.getTargetUF());
+            weight.setControlUF(requestDto.getControlUF() != null ? requestDto.getControlUF() : weight.getControlUF());
         }
 
 
         weightRepository.save(weight);
         session.setWeight(weight); // 변경이든 새로 생성이든 세션에 연결
         dialysisSessionRepository.save(session);
+
+        // 평균 체중 계산 및 환자 정보 업데이트
+        patient.setAverageWeight(calculateAverageWeight(patient));
+        patientRepository.save(patient);
+    }
+
+    public Double calculateAverageWeight(Patient patient){
+        return patient.getDialysisSessions().stream()
+                .filter(session -> session.getWeight() != null)
+                .filter(session -> session.getWeight().getPreWeight() != null)
+                .sorted(Comparator.comparingLong(DialysisSession::getSession).reversed())
+                .limit(5)
+                .mapToDouble(session -> session.getWeight().getPreWeight())
+                .average()
+                .orElse(0.0);
     }
 
     public void deleteWeightInfo(WeightRequestDto requestDto) {

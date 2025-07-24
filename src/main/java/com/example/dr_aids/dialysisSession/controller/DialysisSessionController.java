@@ -17,6 +17,11 @@ public class DialysisSessionController {
 
     private final DialysisSessionService dialysisSessionService;
 
+    @PostMapping("/info") // 환자 투석 회차 정보 추가
+    public ResponseEntity<?> addDialysisSessionInfo(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
+        dialysisSessionService.addDialysisSessionInfo(sessionDetailRequestDto);
+        return ResponseEntity.ok("투석 회차 정보가 저장되었습니다.");
+    }
     @GetMapping("/info/session/{id}") // 환자의 투석 회차 조회
     public ResponseEntity<?> getPatientSessionInfo(@PathVariable Long id) {
         return ResponseEntity.ok(dialysisSessionService.getDialysisSessionInfo(id));
