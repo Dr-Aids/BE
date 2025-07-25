@@ -23,9 +23,22 @@ public class WeightController implements WeightControllerDocs {
     }
 
     @DeleteMapping()
-    public ResponseEntity<?> deleteWeightInfo(@RequestBody WeightRequestDto requestDto) {
-        weightService.deleteWeightInfo(requestDto);
+    public ResponseEntity<?> deleteWeightInfo(@RequestParam(name = "patientId") Long patientId,
+                                              @RequestParam(name = "session")Long session) {
+        weightService.deleteWeightInfo(patientId, session);
         return ResponseEntity.ok("체중 정보가 삭제되었습니다.");
+    }
+
+    @GetMapping("/special-note/current")
+    public ResponseEntity<?> getCurrentSpecialNote(@RequestParam(name = "patientId") Long patientId,
+                                                   @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(weightService.getCurrentSpecialNote(patientId, session));
+    }
+
+    @GetMapping("/special-note/compare")
+    public ResponseEntity<?> getWeightCompare(@RequestParam(name = "patientId") Long patientId,
+                                                   @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(weightService.getWeightCompare(patientId, session));
     }
 
 }

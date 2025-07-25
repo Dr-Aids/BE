@@ -4,6 +4,9 @@ import com.example.dr_aids.bloodpressure.domain.BloodPressure;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPNoteRequestDto;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPSaveRequestDto;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPUpdateRequestDto;
+import com.example.dr_aids.bloodpressure.domain.responseDto.BloodPressureCurrentDto;
+import com.example.dr_aids.bloodpressure.domain.responseDto.BloodPressureDto;
+import com.example.dr_aids.bloodpressure.domain.responseDto.BloodPressureRecentDto;
 import com.example.dr_aids.bloodpressure.repository.BloodPressureRepository;
 import com.example.dr_aids.dialysisSession.domain.DialysisSession;
 import com.example.dr_aids.dialysisSession.repository.DialysisSessionRepository;
@@ -16,6 +19,9 @@ import com.example.dr_aids.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class BloodPressureService {
@@ -23,6 +29,7 @@ public class BloodPressureService {
     private final DialysisSessionRepository dialysisSessionRepository;
     private final PatientRepository  patientRepository;
     private final UserRepository userRepository;
+
     public DialysisSession addBloodPressureInfo(BPSaveRequestDto bloodPressureDto) {
         Patient patient = patientRepository.findById(bloodPressureDto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
@@ -125,6 +132,56 @@ public class BloodPressureService {
         bloodPressure.setAuthor(null); // 작성자 정보 삭제
         bloodPressure.setIsChecked(null); // 체크 여부 초기화
     }
+    public BloodPressureCurrentDto getSpecialNoteCurrent(Long patientId, Long session) {
 
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
+        DialysisSession dialysisSession = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), session)
+                .orElseThrow(() -> new CustomException(ErrorCode.SESSION_NOT_FOUND));
+
+        List<BloodPressure> pressures = dialysisSession.getBloodPressures();
+        if (pressures.isEmpty()) {
+            throw new CustomException(ErrorCode.BLOOD_PRESSURE_NOT_FOUND);
+        }
+
+        BloodPressure firstBloodPressure = pressures.get(0);
+        BloodPressure lastBloodPressure = pressures.get(pressures.size() - 1);
+
+        return BloodPressureCurrentDto.builder()
+                .startSbp(firstBloodPressure.getSBP())
+                .startDbp(firstBloodPressure.getDBP())
+                .lastSbp(lastBloodPressure.getSBP())
+                .lastDbp(lastBloodPressure.getDBP())
+                .build();
+    }
+    public List<BloodPressureRecentDto> getRecentTwoSessionsWithBP(Long patientId, Long session) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+
+        // 1. session 이하 중 가장 최근 2개 회차 조회
+        List<DialysisSession> sessions = dialysisSessionRepository
+                .findTop2ByPatient_IdAndSessionLessThanEqualOrderBySessionDesc(patientId, session);
+
+        if (sessions.isEmpty()) {
+            throw new CustomException(ErrorCode.SESSION_NOT_FOUND);
+        }
+
+        // 2. DTO 변환
+        return sessions.stream()
+                .map(dialysisSession -> BloodPressureRecentDto.builder()
+                        .session(dialysisSession.getSession())
+                        .bloodPressureDto(
+                                dialysisSession.getBloodPressures().stream()
+                                        .sorted(Comparator.comparing(BloodPressure::getMeasurementTime))
+                                        .map(bp -> BloodPressureDto.builder()
+                                                .time(bp.getMeasurementTime().toString())
+                                                .sbp(bp.getSBP())
+                                                .dbp(bp.getDBP())
+                                                .build())
+                                        .toList()
+                        )
+                        .build())
+                .toList();
+    }
 }

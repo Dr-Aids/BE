@@ -66,4 +66,16 @@ public class BloodPressureController implements BloodPressureControllerDocs {
         bloodPressureService.deleteBloodPressureNotes(pressureId);
         return ResponseEntity.ok("혈압 노트가 삭제되었습니다.");
     }
+
+    @GetMapping("/special-note/current")
+    public ResponseEntity<?> getSpecialNoteCurrent(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(bloodPressureService.getSpecialNoteCurrent(patientId, session));
+    }
+
+    @GetMapping("/special-note/recent")
+    public ResponseEntity<?> getRecentTwoSessionsWithBP(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(bloodPressureService.getRecentTwoSessionsWithBP(patientId, session));
+    }
+
+
 }
