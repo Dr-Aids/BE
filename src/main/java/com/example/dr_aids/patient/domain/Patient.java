@@ -39,6 +39,7 @@ public class Patient extends BaseEntity {
 
     private Double averageWeight;
 
+    @Builder.Default
     private Boolean visiting = false;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)

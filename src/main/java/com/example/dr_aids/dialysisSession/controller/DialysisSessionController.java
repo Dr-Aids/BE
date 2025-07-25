@@ -29,25 +29,24 @@ public class DialysisSessionController implements DialysisSessionControllerDocs 
         return ResponseEntity.ok(dialysisSessionService.getDialysisSessionInfo(id));
     }
 
-    @GetMapping("/weight") // 환자 현재 회차 체중 조회
-    public ResponseEntity<?> getPatientWeightBySession(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientWeightBySession(sessionDetailRequestDto));
+    @GetMapping("/weight") // 현재 회차 체중 정보 조회
+    public ResponseEntity<?> getWeight(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientWeightBySession(patientId, session));
     }
 
-    @GetMapping("/weights") // 환자의 이전 5회차 체중 기록 조회)
-    public ResponseEntity<?> getPatientWeightTrend(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientWeightTrend(sessionDetailRequestDto));
+    @GetMapping("/weights") // 이전 5회차 체중 변화 조회
+    public ResponseEntity<?> getWeightTrend(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientWeightTrend(patientId, session));
     }
 
-    @GetMapping("/bps") // 환자의 현재 회차 혈압 기록 조회
-    public ResponseEntity<?> getPatientBloodPressureBySession(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureBySession(sessionDetailRequestDto));
+    @GetMapping("/bps") // 현재 회차 혈압 정보 조회
+    public ResponseEntity<?> getBloodPressure(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureBySession(patientId, session));
     }
 
-    @GetMapping("/bpnotes") // 환자의 현재 회차 혈압 기록 노트 조회
-    public ResponseEntity<?> getPatientBloodPressureNotes(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureNotes(sessionDetailRequestDto));
-
+    @GetMapping("/bpnotes") // 현재 회차 혈압 노트 정보 조회
+    public ResponseEntity<?> getBloodPressureNotes(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureNotes(patientId, session));
     }
 
 

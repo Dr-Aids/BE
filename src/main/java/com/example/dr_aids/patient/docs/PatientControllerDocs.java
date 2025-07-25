@@ -6,6 +6,7 @@ import com.example.dr_aids.patient.domain.responseDto.PatientInfoResponseDto;
 import com.example.dr_aids.patient.domain.responseDto.PatientListResponseDto;
 import com.example.dr_aids.security.common.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -47,12 +48,18 @@ public interface PatientControllerDocs {
     )
     ResponseEntity<?> updatePatientInfo(@PathVariable Long id, @org.springframework.web.bind.annotation.RequestBody PatientInfoRequestDto dto);
 
-    @Operation(summary = "환자 정보 삭제", description = "지정한 환자 정보를 삭제합니다.")
+    @Operation(summary = "환자 정보 삭제", description = "지정한 환자 정보를 삭제합니다.",
+            parameters = {
+                    @Parameter(name = "id", description = "환자 ID", required = true, example = "1")
+            })
     @ApiResponse(responseCode = "200", description = "환자 정보 삭제 성공",
             content = @Content(schema = @Schema(example = "{\"message\": \"환자 삭제가 완료되었습니다.\"}")))
     ResponseEntity<?> deletePatientInfo(@PathVariable Long id);
 
-    @Operation(summary = "환자 정보 조회", description = "ID를 기반으로 환자 상세 정보를 조회합니다.")
+    @Operation(summary = "환자 정보 조회", description = "ID를 기반으로 환자 상세 정보를 조회합니다.",
+            parameters = {
+                    @Parameter(name = "id", description = "환자 ID", required = true, example = "1")
+            })
     @ApiResponse(responseCode = "200", description = "환자 정보 조회 성공",
             content = @Content(schema = @Schema(implementation = PatientInfoResponseDto.class)))
     ResponseEntity<?> getPatientInfo(@PathVariable Long id);
@@ -67,6 +74,9 @@ public interface PatientControllerDocs {
     @Operation(
             summary = "환자 방문 여부 수정",
             description = "특정 환자의 당일 방문 여부를 업데이트합니다.",
+            parameters = {
+                    @Parameter(name = "id", description = "환자 ID", required = true, example = "1")
+            },
             requestBody = @RequestBody(
                     description = "방문 여부 수정 요청 DTO",
                     required = true,

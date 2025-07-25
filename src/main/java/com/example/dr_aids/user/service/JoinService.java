@@ -29,9 +29,9 @@ public class JoinService {
         String password = joinDTO.getPassword();
         String email = joinDTO.getEmail();
         String role = joinDTO.getRole();
-        String hospitalname = joinDTO.getHospitalname();
+        String hospitalName = joinDTO.getHospitalname();
 
-        if(username == null || password == null || email == null || role == null || hospitalname == null) {
+        if(username == null || password == null || email == null || role == null || hospitalName == null) {
             log.info("joinProcess 실패");
             throw new CustomException(ErrorCode.INVALID_REQUEST);
 
@@ -49,7 +49,7 @@ public class JoinService {
         data.setEmail(email);
         data.setRole(Role.valueOf(role));
         //병원 추가
-        Optional<Hospital> hospital = hospitalRepository.findByHospitalName(hospitalname);
+        Optional<Hospital> hospital = hospitalRepository.findByHospitalName(hospitalName);
 
         if (hospital.isEmpty()) {
             log.info("joinProcess 실패: 병원이 존재하지 않습니다.");

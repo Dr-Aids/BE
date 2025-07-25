@@ -1,8 +1,9 @@
 package com.example.dr_aids.hospital.service;
 
+import com.example.dr_aids.exception.CustomException;
+import com.example.dr_aids.exception.ErrorCode;
 import com.example.dr_aids.hospital.domain.Hospital;
 import com.example.dr_aids.hospital.domain.HospitalListDto;
-import com.example.dr_aids.hospital.domain.HospitalNameRequestDto;
 import com.example.dr_aids.hospital.repository.HospitalRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,33 @@ public class HospitalService {
 
     private final HospitalRepository hospitalRepository;
 
-    public void saveHospital(HospitalNameRequestDto hospitalName) {
+    public void saveHospital(String hospitalName) {
+        if (hospitalName == null || hospitalName.isEmpty()) {
+            throw new CustomException(ErrorCode.HOSPITAL_NAME_REQUIRED);
+        }
+        if(hospitalRepository.findByHospitalName(hospitalName).isPresent()) {
+            throw new CustomException(ErrorCode.HOSPITAL_ALREADY_EXISTS);
+        }
+
         Hospital hospital = Hospital.builder()
-                .hospitalName(hospitalName.getHospitalName())
+                .hospitalName(hospitalName)
                 .build();
         hospitalRepository.save(hospital);
     }
 
-    public List<HospitalListDto> getHospitalByName(HospitalNameRequestDto hospitalName) {
-        return hospitalRepository.findAllByHospitalName(hospitalName.getHospitalName()).stream().map(
+    public List<HospitalListDto> getHospitalByName(String hospitalName) {
+        if (hospitalName == null || hospitalName.isEmpty()) {
+            throw new CustomException(ErrorCode.HOSPITAL_NAME_REQUIRED);
+        }
+        if (hospitalName.length() < 2) {
+            throw new CustomException(ErrorCode.HOSPITAL_NAME_TOO_SHORT);
+        }
+        List<Hospital> hospitals = hospitalRepository.findAllByHospitalName(hospitalName);
+        if (hospitals.isEmpty()) {
+            throw new CustomException(ErrorCode.HOSPITAL_NOT_FOUND);
+        }
+
+        return hospitals.stream().map(
                 hospital -> HospitalListDto.builder()
                         .id(hospital.getId())
                         .hospitalName(hospital.getHospitalName())
