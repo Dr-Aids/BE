@@ -49,6 +49,4 @@ public class DialysisSessionController implements DialysisSessionControllerDocs 
         return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureNotes(patientId, session));
     }
 
-
-
 }

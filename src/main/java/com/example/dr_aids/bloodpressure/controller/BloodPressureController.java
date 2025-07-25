@@ -1,5 +1,6 @@
 package com.example.dr_aids.bloodpressure.controller;
 
+import com.example.dr_aids.bloodpressure.docs.BloodPressureControllerDocs;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPNoteRequestDto;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPSaveRequestDto;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPUpdateRequestDto;
@@ -15,17 +16,17 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/blood-pressure")
 @Tag(name = "BloodPressure", description = "혈압 API")
-public class BloodPressureController {
+public class BloodPressureController implements BloodPressureControllerDocs {
     private final BloodPressureService bloodPressureService;
 
     @PostMapping()
-    public ResponseEntity<?> addBloodPressureInfo(BPSaveRequestDto bloodPressureDto) {
+    public ResponseEntity<?> addBloodPressureInfo(@RequestBody BPSaveRequestDto bloodPressureDto) {
         bloodPressureService.addBloodPressureInfo(bloodPressureDto);
         return ResponseEntity.ok("혈압 정보가 추가되었습니다.");
     }
 
     @PutMapping()
-    public ResponseEntity<?> updateBloodPressureInfo(BPUpdateRequestDto bloodPressureDto) {
+    public ResponseEntity<?> updateBloodPressureInfo(@RequestBody BPUpdateRequestDto bloodPressureDto) {
         bloodPressureService.updateBloodPressureInfo(bloodPressureDto);
         return ResponseEntity.ok("혈압 정보가 업데이트되었습니다.");
     }
