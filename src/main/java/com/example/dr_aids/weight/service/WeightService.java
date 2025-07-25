@@ -25,7 +25,7 @@ public class WeightService {
                 .orElseThrow(() -> new IllegalArgumentException("환자를 찾을 수 없습니다."));
 
         DialysisSession session = dialysisSessionRepository
-                .findByPatientIdAndSession(patient.getId(), requestDto.getSession())
+                .findByPatient_IdAndSession(patient.getId(), requestDto.getSession())
                 .orElseThrow(() -> new IllegalArgumentException("해당 세션을 찾을 수 없습니다."));
 
         Weight weight = session.getWeight();

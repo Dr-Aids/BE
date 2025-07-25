@@ -1,9 +1,11 @@
 package com.example.dr_aids.dialysisSession.controller;
 
 import com.example.dr_aids.dialysisSession.docs.DialysisSessionControllerDocs;
+import com.example.dr_aids.dialysisSession.domain.DialysisSession;
 import com.example.dr_aids.dialysisSession.domain.SessionSaveRequestDto;
 import com.example.dr_aids.dialysisSession.service.DialysisSessionService;
 import com.example.dr_aids.dialysisSession.domain.SessionDetailRequestDto;
+import com.example.dr_aids.specialNote.service.SpecialNoteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class DialysisSessionController implements DialysisSessionControllerDocs {
 
     private final DialysisSessionService dialysisSessionService;
+    private final SpecialNoteService specialNoteService;
 
     @PostMapping("") // 환자 투석 회차 정보 추가
     public ResponseEntity<?> addDialysisSessionInfo(@RequestBody SessionSaveRequestDto sessionSaveRequestDto) {
-        dialysisSessionService.addDialysisSessionInfo(sessionSaveRequestDto);
+        DialysisSession dialysisSession = dialysisSessionService.addDialysisSessionInfo(sessionSaveRequestDto);
+        specialNoteService.checkSpecialNotesWhenSessionAdd(sessionSaveRequestDto, dialysisSession);
+
         return ResponseEntity.ok("투석 회차 정보가 추가되었습니다.");
     }
     @GetMapping("/{id}") // 환자의 투석 회차 조회

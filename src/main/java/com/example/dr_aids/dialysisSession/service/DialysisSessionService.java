@@ -29,7 +29,7 @@ public class DialysisSessionService {
     private final DialysisSessionRepository dialysisSessionRepository;
     private final WeightRepository weightRepository;
 
-    public void addDialysisSessionInfo(SessionSaveRequestDto sessionSaveRequestDto) {
+    public DialysisSession addDialysisSessionInfo(SessionSaveRequestDto sessionSaveRequestDto) {
         Patient patient = patientRepository.findById(sessionSaveRequestDto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
@@ -59,6 +59,8 @@ public class DialysisSessionService {
         weightRepository.save(weight);
         patientRepository.save(patient);
         dialysisSessionRepository.save(dialysisSession);
+
+        return dialysisSession;
     }
     public List<SessionInfoResponseDto> getDialysisSessionInfo(Long id){
         Patient patient = patientRepository.findById(id)

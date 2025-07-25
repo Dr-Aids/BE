@@ -23,11 +23,11 @@ public class BloodPressureService {
     private final DialysisSessionRepository dialysisSessionRepository;
     private final PatientRepository  patientRepository;
     private final UserRepository userRepository;
-    public void addBloodPressureInfo(BPSaveRequestDto bloodPressureDto) {
+    public DialysisSession addBloodPressureInfo(BPSaveRequestDto bloodPressureDto) {
         Patient patient = patientRepository.findById(bloodPressureDto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        DialysisSession session = dialysisSessionRepository.findByPatientIdAndSession(patient.getId(), bloodPressureDto.getSession())
+        DialysisSession session = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), bloodPressureDto.getSession())
                 .orElseThrow(() -> new CustomException(ErrorCode.SESSION_NOT_FOUND));
 
         BloodPressure bloodPressure = BloodPressure.builder()
@@ -39,13 +39,15 @@ public class BloodPressureService {
 
         session.getBloodPressures().add(bloodPressure);
         dialysisSessionRepository.save(session);
+
+        return session;
     }
 
     public void updateBloodPressureInfo(BPUpdateRequestDto bloodPressureDto) {
         Patient patient = patientRepository.findById(bloodPressureDto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        DialysisSession session = dialysisSessionRepository.findByPatientIdAndSession(patient.getId(), bloodPressureDto.getSession())
+        DialysisSession session = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), bloodPressureDto.getSession())
                 .orElseThrow(() -> new CustomException(ErrorCode.SESSION_NOT_FOUND));
 
         BloodPressure bloodPressure = bloodPressureRepository.findById(bloodPressureDto.getBloodId())
@@ -78,7 +80,7 @@ public class BloodPressureService {
         Patient patient = patientRepository.findById(requestDto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        DialysisSession session = dialysisSessionRepository.findByPatientIdAndSession(patient.getId(), requestDto.getSession())
+        DialysisSession session = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), requestDto.getSession())
                 .orElseThrow(() -> new CustomException(ErrorCode.SESSION_NOT_FOUND));
 
         BloodPressure bloodPressure = bloodPressureRepository.findById(requestDto.getBloodId())
@@ -98,7 +100,7 @@ public class BloodPressureService {
         Patient patient = patientRepository.findById(requestDto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        DialysisSession session = dialysisSessionRepository.findByPatientIdAndSession(patient.getId(), requestDto.getSession())
+        DialysisSession session = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), requestDto.getSession())
                 .orElseThrow(() -> new CustomException(ErrorCode.SESSION_NOT_FOUND));
 
         BloodPressure bloodPressure = bloodPressureRepository.findById(requestDto.getBloodId())

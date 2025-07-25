@@ -76,7 +76,7 @@ public class PatientService {
             User doctor = userRepository.findByUsername(patientInfoRequestDto.getPIC())
                     .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
 
-            Optional<Assignment> assignmentOptional = assignmentRepository.findByPatientId(id);
+            Optional<Assignment> assignmentOptional = assignmentRepository.findByPatient_Id(id);
 
             Assignment assignment;
             if(assignmentOptional.isPresent()){
@@ -103,7 +103,7 @@ public class PatientService {
         patient.getDialysisSessions().clear();
 
         // 2. Assignment 먼저 삭제
-        assignmentRepository.findByPatientId(id).ifPresent(assignmentRepository::delete);
+        assignmentRepository.findByPatient_Id(id).ifPresent(assignmentRepository::delete);
 
         // 3. Patient 삭제
         patientRepository.delete(patient);
@@ -115,7 +115,7 @@ public class PatientService {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        Optional<Assignment> assignmentOptional = assignmentRepository.findByPatientId(id);
+        Optional<Assignment> assignmentOptional = assignmentRepository.findByPatient_Id(id);
 
         String doctorName = assignmentOptional.map(assignment -> assignment.getDoctor().getUsername())
                 .orElse(null);

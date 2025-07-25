@@ -21,6 +21,10 @@ public enum ErrorCode {
     SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "세션을 찾을 수 없습니다"),
     BLOOD_PRESSURE_NOT_FOUND(HttpStatus.NOT_FOUND, "혈압 정보를 찾을 수 없습니다"),
 
+    //회차 관련 오류
+    DIALYSIS_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "투석 회차를 찾을 수 없습니다"),
+
+
     // 의사 관련 오류,
     DOCTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "의사를 찾을 수 없습니다"),
 

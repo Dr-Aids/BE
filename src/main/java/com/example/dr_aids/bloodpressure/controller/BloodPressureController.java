@@ -5,7 +5,9 @@ import com.example.dr_aids.bloodpressure.domain.requestDto.BPNoteRequestDto;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPSaveRequestDto;
 import com.example.dr_aids.bloodpressure.domain.requestDto.BPUpdateRequestDto;
 import com.example.dr_aids.bloodpressure.service.BloodPressureService;
+import com.example.dr_aids.dialysisSession.domain.DialysisSession;
 import com.example.dr_aids.security.common.CustomUserDetails;
+import com.example.dr_aids.specialNote.service.SpecialNoteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "BloodPressure", description = "혈압 API")
 public class BloodPressureController implements BloodPressureControllerDocs {
     private final BloodPressureService bloodPressureService;
+    private final SpecialNoteService specialNoteService;
 
     @PostMapping()
     public ResponseEntity<?> addBloodPressureInfo(@RequestBody BPSaveRequestDto bloodPressureDto) {
-        bloodPressureService.addBloodPressureInfo(bloodPressureDto);
+        DialysisSession session = bloodPressureService.addBloodPressureInfo(bloodPressureDto);
+        specialNoteService.checkSpecialNotesWhenBloodPressureAdd(bloodPressureDto, session);
         return ResponseEntity.ok("혈압 정보가 추가되었습니다.");
     }
 
