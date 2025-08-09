@@ -10,5 +10,4 @@ public class WeightCompareDto {
     private Double gapBetweenBeforeAndNow;
     private Double averageWeight; // 평균 체중
     private Double gapBetweenAverageAndNow; // 평균 체중과 현재 체중의 차이
-
 }

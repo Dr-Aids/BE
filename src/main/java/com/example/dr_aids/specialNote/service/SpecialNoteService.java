@@ -157,13 +157,13 @@ public class SpecialNoteService {
     }
 
 
+    // 환자별 최근 2회 특이사항 조회
     public List<SpecialNotePatientDto> getRecentTwoSpecialNotes(Long patientId) {
         List<SpecialNote> specialNotes = specialNoteRepository.findRecentTwoSessionsNotesByPatientId(patientId);
 
         return specialNotes.stream()
                 .map(note -> {
                     DialysisSession session = note.getDialysisSession();
-                    Patient patient = session.getPatient();
 
                     return SpecialNotePatientDto.builder()
                             .session(session.getSession())
