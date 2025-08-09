@@ -37,12 +37,10 @@ public class Patient extends BaseEntity {
     @Column(nullable = false)
     private String disease;
 
-    private Double averageWeightGain;
     private Double averageWeight;
 
-
+    @Builder.Default
     private Boolean visiting = false;
-
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DialysisSession> dialysisSessions = new ArrayList<>();

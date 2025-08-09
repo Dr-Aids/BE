@@ -1,7 +1,11 @@
 package com.example.dr_aids.dialysisSession.controller;
 
+import com.example.dr_aids.dialysisSession.docs.DialysisSessionControllerDocs;
+import com.example.dr_aids.dialysisSession.domain.DialysisSession;
+import com.example.dr_aids.dialysisSession.domain.SessionSaveRequestDto;
 import com.example.dr_aids.dialysisSession.service.DialysisSessionService;
 import com.example.dr_aids.dialysisSession.domain.SessionDetailRequestDto;
+import com.example.dr_aids.specialNote.service.SpecialNoteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,34 +17,41 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @AllArgsConstructor
 @RequestMapping("/session")
-public class DialysisSessionController {
+public class DialysisSessionController implements DialysisSessionControllerDocs {
 
     private final DialysisSessionService dialysisSessionService;
+    private final SpecialNoteService specialNoteService;
 
-    @GetMapping("/info/session/{id}") // 환자의 투석 회차 조회
+    @PostMapping("") // 환자 투석 회차 정보 추가
+    public ResponseEntity<?> addDialysisSessionInfo(@RequestBody SessionSaveRequestDto sessionSaveRequestDto) {
+        DialysisSession dialysisSession = dialysisSessionService.addDialysisSessionInfo(sessionSaveRequestDto);
+        specialNoteService.checkSpecialNotesWhenSessionAdd(sessionSaveRequestDto, dialysisSession);
+
+        return ResponseEntity.ok("투석 회차 정보가 추가되었습니다.");
+    }
+    @GetMapping("/{id}") // 환자의 투석 회차 조회
     public ResponseEntity<?> getPatientSessionInfo(@PathVariable Long id) {
         return ResponseEntity.ok(dialysisSessionService.getDialysisSessionInfo(id));
     }
 
-    @GetMapping("/info/session/weight") // 환자 현재 회차 체중 조회
-    public ResponseEntity<?> getPatientWeightBySession(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientWeightBySession(sessionDetailRequestDto));
+    @GetMapping("/weight") // 현재 회차 체중 정보 조회
+    public ResponseEntity<?> getWeight(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientWeightBySession(patientId, session));
     }
 
-    @GetMapping("/info/session/weights") // 환자의 이전 5회차 체중 기록 조회)
-    public ResponseEntity<?> getPatientWeightTrend(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientWeightTrend(sessionDetailRequestDto));
+    @GetMapping("/weights") // 이전 5회차 체중 변화 조회
+    public ResponseEntity<?> getWeightTrend(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientWeightTrend(patientId, session));
     }
 
-    @GetMapping("/info/session/bps") // 환자의 현재 회차 혈압 기록 조회
-    public ResponseEntity<?> getPatientBloodPressureBySession(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureBySession(sessionDetailRequestDto));
+    @GetMapping("/bps") // 현재 회차 혈압 정보 조회
+    public ResponseEntity<?> getBloodPressure(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureBySession(patientId, session));
     }
 
-    @GetMapping("/info/session/bpnotes") // 환자의 현재 회차 혈압 기록 노트 조회
-    public ResponseEntity<?> getPatientBloodPressureNotes(@RequestBody SessionDetailRequestDto sessionDetailRequestDto) {
-        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureNotes(sessionDetailRequestDto));
-
+    @GetMapping("/bpnotes") // 현재 회차 혈압 노트 정보 조회
+    public ResponseEntity<?> getBloodPressureNotes(@RequestParam(name = "patientId") Long patientId, @RequestParam(name = "session") Long session) {
+        return ResponseEntity.ok(dialysisSessionService.getPatientBloodPressureNotes(patientId, session));
     }
 
 }

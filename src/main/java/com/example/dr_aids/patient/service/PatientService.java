@@ -76,7 +76,7 @@ public class PatientService {
             User doctor = userRepository.findByUsername(patientInfoRequestDto.getPIC())
                     .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
 
-            Optional<Assignment> assignmentOptional = assignmentRepository.findByPatientId(id);
+            Optional<Assignment> assignmentOptional = assignmentRepository.findByPatient_Id(id);
 
             Assignment assignment;
             if(assignmentOptional.isPresent()){
@@ -95,22 +95,28 @@ public class PatientService {
     }
 
     public void deletePatientInfo(Long id) {
+
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+
+        // 1. DialysisSession 연결 끊기
+        patient.getDialysisSessions().clear();
+
+        // 2. Assignment 먼저 삭제
+        assignmentRepository.findByPatient_Id(id).ifPresent(assignmentRepository::delete);
+
+        // 3. Patient 삭제
         patientRepository.delete(patient);
 
-        // 환자 정보 삭제 시, 해당 환자의 배정 정보도 삭제
-        Optional<Assignment> assignmentOptional = assignmentRepository.findByPatientId(id);
-        if (assignmentOptional.isPresent()) {
-            Assignment assignment = assignmentOptional.get();
-            assignmentRepository.delete(assignment);
-        }
+
     }
 
     public PatientInfoResponseDto getPatientInfo(Long id) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
-        Optional<Assignment> assignmentOptional = assignmentRepository.findByPatientId(id);
+
+        Optional<Assignment> assignmentOptional = assignmentRepository.findByPatient_Id(id);
+
         String doctorName = assignmentOptional.map(assignment -> assignment.getDoctor().getUsername())
                 .orElse(null);
         return PatientInfoResponseDto.builder()
@@ -125,7 +131,11 @@ public class PatientService {
     }
 
     public List<PatientListResponseDto> getPatientListByHospital(User user){
-        Hospital hospital = user.getHospital();
+        User managedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+
+        Hospital hospital = managedUser.getHospital();
         List<Patient> patients = patientRepository.findPatientsByHospitalName(hospital.getHospitalName());
 
         if (patients == null || patients.isEmpty()) {
@@ -147,6 +157,7 @@ public class PatientService {
     public void updatePatientVisitingStatus(Long id, PatientVisitindRequestDto patientVisitindRequestDto) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+
         patient.setVisiting(patientVisitindRequestDto.getVisiting());
         patientRepository.save(patient);
     }

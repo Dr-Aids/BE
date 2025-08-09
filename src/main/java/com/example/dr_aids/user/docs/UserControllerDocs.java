@@ -1,6 +1,7 @@
 package com.example.dr_aids.user.docs;
 
 import com.example.dr_aids.security.common.CustomUserDetails;
+import com.example.dr_aids.user.domain.UserInfoResponseDto;
 import com.example.dr_aids.user.domain.UserUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,11 +21,11 @@ public interface UserControllerDocs {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용자 정보 반환 성공",
-                    content = @Content(schema = @Schema(implementation = CustomUserDetails.class))
+                    content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class))
             ),
             @ApiResponse(responseCode = "400", description = "사용자 인증 정보 없음",
                     content = @Content(schema = @Schema(
-                            example = "{\"error\": \"User details not found\"}"
+                            example = "{\"error\": \"잘못된 사용자입니다.\"}"
                     ))
             )
     })
@@ -37,12 +38,12 @@ public interface UserControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용자 정보 수정 성공",
                     content = @Content(schema = @Schema(
-                            example = "{\"message\": \"User updated successfully\"}"
+                            example = "{\"message\": \"사용자 정보 수정이 완료되었습니다.\"}"
                     ))
             ),
             @ApiResponse(responseCode = "400", description = "인증 정보 누락 또는 유효하지 않은 요청",
                     content = @Content(schema = @Schema(
-                            example = "{\"error\": \"User details not found\"}"
+                            example = "{\"error\": \"잘못된 사용자입니다.\"}"
                     ))
             )
     })

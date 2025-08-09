@@ -1,4 +1,4 @@
-package com.example.dr_aids.bloodpressure.domain;
+package com.example.dr_aids.bloodpressure.domain.responseDto;
 
 import lombok.Builder;
 import lombok.Data;

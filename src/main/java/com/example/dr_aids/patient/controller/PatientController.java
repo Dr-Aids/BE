@@ -29,19 +29,19 @@ public class PatientController implements PatientControllerDocs {
     }
 
     @PutMapping("/info/{id}") // 환자 정보 수정
-    public ResponseEntity<?> updatePatientInfo(@PathVariable Long id, @RequestBody PatientInfoRequestDto patientInfoRequestDto) {
+    public ResponseEntity<?> updatePatientInfo(@PathVariable("id") Long id, @RequestBody PatientInfoRequestDto patientInfoRequestDto) {
         patientService.updatePatientInfo(id, patientInfoRequestDto);
         return ResponseEntity.ok("환자 정보가 수정되었습니다.");
     }
 
     @DeleteMapping("/info/{id}") // 환자 정보 삭제
-    public ResponseEntity<?> deletePatientInfo(@PathVariable Long id) {
+    public ResponseEntity<?> deletePatientInfo(@PathVariable("id") Long id) {
         patientService.deletePatientInfo(id);
         return ResponseEntity.ok("환자 삭제가 완료되었습니다.");
     }
 
     @GetMapping("/info/{id}") // 환자 정보 조회
-    public ResponseEntity<?> getPatientInfo(@PathVariable Long id) {
+    public ResponseEntity<?> getPatientInfo(@PathVariable("id") Long id) {
         return ResponseEntity.ok(patientService.getPatientInfo(id));
     }
 
@@ -55,7 +55,7 @@ public class PatientController implements PatientControllerDocs {
     }
 
     @PutMapping("/info/visiting/{id}") // 환자 방문 여부 수정
-    public ResponseEntity<?> updatePatientVisitingStatus(@PathVariable Long id, @RequestBody PatientVisitindRequestDto patientVisitindRequestDto) {
+    public ResponseEntity<?> updatePatientVisitingStatus(@PathVariable("id") Long id, @RequestBody PatientVisitindRequestDto patientVisitindRequestDto) {
         patientService.updatePatientVisitingStatus(id, patientVisitindRequestDto);
         return ResponseEntity.ok("환자 방문 여부가 수정되었습니다.");
     }

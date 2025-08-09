@@ -1,4 +1,4 @@
-package com.example.dr_aids.weight.domain;
+package com.example.dr_aids.weight.domain.responseDto;
 
 import lombok.Builder;
 import lombok.Data;

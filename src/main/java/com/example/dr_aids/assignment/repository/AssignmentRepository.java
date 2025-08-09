@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
-    Optional<Assignment> findByPatientId(Long patientId);
+    Optional<Assignment> findByPatient_Id(Long patientId);
 }

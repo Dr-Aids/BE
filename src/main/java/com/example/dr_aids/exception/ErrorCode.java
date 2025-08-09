@@ -19,9 +19,21 @@ public enum ErrorCode {
     // 환자 관련 오류
     PATIENT_NOT_FOUND(HttpStatus.NOT_FOUND, "환자를 찾을 수 없습니다"),
     SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "세션을 찾을 수 없습니다"),
+    BLOOD_PRESSURE_NOT_FOUND(HttpStatus.NOT_FOUND, "혈압 정보를 찾을 수 없습니다"),
+
+    //회차 관련 오류
+    DIALYSIS_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "투석 회차를 찾을 수 없습니다"),
+
 
     // 의사 관련 오류,
-    DOCTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "의사를 찾을 수 없습니다");
+    DOCTOR_NOT_FOUND(HttpStatus.NOT_FOUND, "의사를 찾을 수 없습니다"),
+
+    //병원 관련 오류
+    HOSPITAL_NOT_FOUND(HttpStatus.NOT_FOUND, "병원을 찾을 수 없습니다"),
+    HOSPITAL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 병원입니다"),
+    HOSPITAL_NAME_TOO_SHORT(HttpStatus.BAD_REQUEST, "병원 이름은 최소 2자 이상이어야 합니다"),
+    HOSPITAL_NAME_REQUIRED(HttpStatus.BAD_REQUEST, "병원 이름은 필수 입력 항목입니다");
+
 
 
     private final String message;

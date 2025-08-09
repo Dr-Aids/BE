@@ -17,7 +17,7 @@ public class SpecialNote {
 
     private String type;
     private String ruleName;
-    private String value;
+    private double value;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dialysis_session_id")
