@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RequestMapping("/patient")
 public interface PatientControllerDocs {
 
@@ -52,9 +53,11 @@ public interface PatientControllerDocs {
             parameters = {
                     @Parameter(name = "id", description = "환자 ID", required = true, example = "1")
             })
+
     @ApiResponse(responseCode = "200", description = "환자 정보 삭제 성공",
             content = @Content(schema = @Schema(example = "{\"message\": \"환자 삭제가 완료되었습니다.\"}")))
     ResponseEntity<?> deletePatientInfo(@PathVariable Long id);
+
 
     @Operation(summary = "환자 정보 조회", description = "ID를 기반으로 환자 상세 정보를 조회합니다.",
             parameters = {
@@ -70,6 +73,7 @@ public interface PatientControllerDocs {
                     content = @Content(schema = @Schema(implementation = PatientListResponseDto.class)))
     })
     ResponseEntity<?> getPatientListByHospital(CustomUserDetails userDetails);
+
 
     @Operation(
             summary = "환자 방문 여부 수정",

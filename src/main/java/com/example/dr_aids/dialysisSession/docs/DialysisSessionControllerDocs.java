@@ -1,5 +1,6 @@
 package com.example.dr_aids.dialysisSession.docs;
 
+
 import com.example.dr_aids.dialysisSession.domain.SessionSaveRequestDto;
 import com.example.dr_aids.patient.domain.responseDto.SessionInfoResponseDto;
 import com.example.dr_aids.weight.domain.responseDto.WeightDetailDto;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RequestMapping("/session")
 public interface DialysisSessionControllerDocs {
@@ -93,4 +95,3 @@ public interface DialysisSessionControllerDocs {
     )
     ResponseEntity<?> getBloodPressureNotes(@RequestParam Long patientId, @RequestParam Long session);
 }
-
