@@ -22,6 +22,7 @@ public class BloodTest {
     private Double TIBC;
     private Double PTH;
     private Double hemoglobin;
+    private Double hematocrit;
     private LocalDate date;
 
     @ManyToOne
