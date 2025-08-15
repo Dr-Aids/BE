@@ -1,17 +1,10 @@
-cat > .dockerignore <<'EOF'
 .git
 .gitignore
 .gradle
 build
 out
 node_modules
+.env
 *.iml
-*.ipr
-*.iws
 .idea
 .vscode
-*.log
-Dockerfile*
-docker-compose*.yml
-.env
-EOF
