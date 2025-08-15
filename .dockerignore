@@ -1,0 +1,17 @@
+cat > .dockerignore <<'EOF'
+.git
+.gitignore
+.gradle
+build
+out
+node_modules
+*.iml
+*.ipr
+*.iws
+.idea
+.vscode
+*.log
+Dockerfile*
+docker-compose*.yml
+.env
+EOF

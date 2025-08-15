@@ -2,6 +2,7 @@ package com.example.dr_aids.dialysisSession.repository;
 
 import com.example.dr_aids.dialysisSession.domain.DialysisSession;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;

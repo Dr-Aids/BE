@@ -1,0 +1,25 @@
+name: dr-aids
+services:
+  app:
+    build: src/main/java                       # ECR 이미지를 쓸 거면 대신 image: 로 교체
+    # image: 123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/dr-aids-api:latest
+    container_name: dr-aids-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env                       # 같은 폴더의 .env 읽기 (권장)
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # JWT_SECRET: ${JWT_SECRET}
+      # OAUTH_KEYS: ${OAUTH_KEYS}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 5

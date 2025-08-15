@@ -32,7 +32,10 @@ public enum ErrorCode {
     HOSPITAL_NOT_FOUND(HttpStatus.NOT_FOUND, "병원을 찾을 수 없습니다"),
     HOSPITAL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 병원입니다"),
     HOSPITAL_NAME_TOO_SHORT(HttpStatus.BAD_REQUEST, "병원 이름은 최소 2자 이상이어야 합니다"),
-    HOSPITAL_NAME_REQUIRED(HttpStatus.BAD_REQUEST, "병원 이름은 필수 입력 항목입니다");
+    HOSPITAL_NAME_REQUIRED(HttpStatus.BAD_REQUEST, "병원 이름은 필수 입력 항목입니다"),
+
+    // 처방전 관련 오류
+    PRESCRIPTION_NOT_FOUND(HttpStatus.BAD_REQUEST, "처방전을 찾을 수 없습니다"),;
 
 
 
