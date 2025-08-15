@@ -19,13 +19,13 @@ public class BloodTestController {
         return ResponseEntity.ok("혈액검사 저장 완료되었습니다.");
     }
 
-    @GetMapping("/{patientId}/{targetDate}")
+    @GetMapping("/{patientId}/{targetDate}/all")
     public ResponseEntity<?> getBloodTestAll(@RequestParam(name = "patientId") Long patientId,
                                              @RequestParam(name = "targetDate") String targetDate){
         return ResponseEntity.ok(bloodTestService.getBloodTestAll(patientId, targetDate));
     }
 
-    @GetMapping("/{patientId}/{targetDate")
+    @GetMapping("/{patientId}/{targetDate}/only-hb")
     public ResponseEntity<?> getBloodTestOnlyHb(@RequestParam(name = "patientId") Long patientId,
                                                 @RequestParam(name = "targetDate") String targetDate){
         return ResponseEntity.ok(bloodTestService.getBloodTestOnlyHb(patientId, targetDate));
