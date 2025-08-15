@@ -33,6 +33,7 @@ public class DialysisSession { //투석회차
     @JoinColumn(name = "weight_id")
     private Weight weight;
 
+    @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dialysis_session_id")
     private List<BloodPressure> bloodPressures = new ArrayList<>();

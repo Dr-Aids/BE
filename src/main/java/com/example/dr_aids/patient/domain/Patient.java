@@ -42,6 +42,7 @@ public class Patient extends BaseEntity {
     @Builder.Default
     private Boolean visiting = false;
 
+    @Builder.Default
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DialysisSession> dialysisSessions = new ArrayList<>();
 
