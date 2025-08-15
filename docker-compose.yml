@@ -1,25 +1,29 @@
 name: dr-aids
 services:
   app:
-    build: src/main/java                       # ECR 이미지를 쓸 거면 대신 image: 로 교체
-    # image: 123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/dr-aids-api:latest
+    build:
+      context: .            # ✅ 현재 폴더(~/app/BE)를 빌드 컨텍스트로
+      dockerfile: Dockerfile
     container_name: dr-aids-api
     restart: unless-stopped
     ports:
       - "8080:8080"
     env_file:
-      - .env                       # 같은 폴더의 .env 읽기 (권장)
+      - .env
+    # ⬇️ 앱에서 환경변수를 직접 읽도록 했으면 그대로 두고,
+    # application.yml이 SPRING_DATASOURCE_URL을 기대한다면 아래처럼 한 줄로 넘기는 게 편함.
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT:-3306}
-      DB_NAME: ${DB_NAME}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      # JWT_SECRET: ${JWT_SECRET}
-      # OAUTH_KEYS: ${OAUTH_KEYS}
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
-      interval: 15s
-      timeout: 3s
-      retries: 5
+      SPRING_DATASOURCE_URL: jdbc:mysql://${DB_HOST}:${DB_PORT:-3306}/${DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SERVER_PORT: 8080
+      JWT_SECRET: ${JWT_SECRET}
+
+    # ⚠️ 기본 JRE 이미지는 wget/curl이 없음 → 헬스체크 실패 원인
+    # 아래 healthcheck를 쓰려면 Dockerfile에서 curl 설치 필요(예시: apt-get install -y curl)
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1"]
+    #   interval: 15s
+    #   timeout: 3s
+    #   retries: 5
