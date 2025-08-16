@@ -1,45 +1,32 @@
 # syntax=docker/dockerfile:1.7
 
-############################
-# 1) Build stage (Gradle)
-############################
 FROM eclipse-temurin:17-jdk AS builder
 WORKDIR /workspace
 
-# Gradle 래퍼/설정만 먼저 복사해서 캐시 효과 극대화
-COPY --chmod=0755 gradlew ./
+# 1) 래퍼/세팅만 먼저 복사
+COPY gradlew ./gradlew
 COPY gradle ./gradle
 COPY settings.gradle* build.gradle* gradle.properties* ./
 
-# Gradle wrapper 준비(캐시 워밍업)
-RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew --no-daemon help
+# (윈도우 커밋 대비) CRLF 제거 + 권한
+RUN sed -i 's/\r$//' gradlew || true && chmod 755 gradlew || true
 
-# 나머지 소스 복사
+# 캐시 워밍업
+RUN --mount=type=cache,target=/root/.gradle sh ./gradlew --no-daemon help
+
+# 2) 나머지 소스
 COPY . .
 
-# ⚠️ COPY . . 로 gradlew가 덮여쓰여 권한이 사라질 수 있으므로 다시 보정
-#    (CRLF 제거 + 실행권한 복구)
-RUN set -eux; \
-    ls -l gradlew || true; \
-    sed -i 's/\r$//' gradlew || true; \
-    chmod 755 gradlew || true; \
-    ls -l gradlew || true
+# ⚠️ COPY . .로 gradlew가 덮여써질 수 있으니 다시 복구
+RUN sed -i 's/\r$//' gradlew || true && chmod 755 gradlew || true && ls -l gradlew
 
-# 실제 빌드 (테스트 스킵은 필요 시 -x test 제거/변경)
-RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew --no-daemon clean bootJar -x test
+# 실제 빌드 (테스트 필요 없으면 -x test 유지)
+RUN --mount=type=cache,target=/root/.gradle sh ./gradlew --no-daemon clean bootJar -x test
 
-############################
-# 2) Run stage (최소 이미지)
-############################
+# ---- runtime ----
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-
-# 빌드 산출물 복사 (명시적으로 app.jar 이름 고정)
 COPY --from=builder /workspace/build/libs/*.jar /app/app.jar
-
 EXPOSE 8080
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75 -Duser.timezone=Asia/Seoul"
-
 ENTRYPOINT ["sh","-c","exec java $JAVA_OPTS -jar /app/app.jar"]
