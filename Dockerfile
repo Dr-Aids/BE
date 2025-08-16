@@ -20,7 +20,11 @@ RUN --mount=type=cache,target=/root/.gradle \
 COPY . .
 
 # ⚠️ 윈도우에서 커밋된 경우 CRLF/실행권한 이슈 방지
-RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
+RUN set -eux; \
+    ls -l gradlew || true; \
+    sed -i 's/\r$//' gradlew || true; \
+    chmod 755 gradlew || true; \
+    ls -l gradlew || true \
 
 # 실제 빌드 (테스트 스킵은 필요 시 -x test 제거/변경)
 RUN --mount=type=cache,target=/root/.gradle \
