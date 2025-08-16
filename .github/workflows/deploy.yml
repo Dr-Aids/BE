@@ -73,30 +73,37 @@ jobs:
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Deploy on EC2 (pull & restart container)
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          CONTAINER_NAME: ${{ env.CONTAINER_NAME }}
-          ENV_PATH: ${{ env.ENV_PATH }}
-          APP_PORT: ${{ env.APP_PORT }}
         run: |
-          ssh -i key.pem -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -i key.pem -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
             set -euo pipefail
-
-            echo "${DOCKERHUB_TOKEN}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin || true
-            docker pull ${IMAGE_NAME}:latest
-
-            docker stop ${CONTAINER_NAME} || true
-            docker rm   ${CONTAINER_NAME} || true
+      
+            # === GitHub Actions 값들을 원격 쉘 변수로 '주입' ===
+            DOCKERHUB_USERNAME='${{ secrets.DOCKERHUB_USERNAME }}'
+            DOCKERHUB_TOKEN='${{ secrets.DOCKERHUB_TOKEN }}'
+            IMAGE_NAME='${{ env.IMAGE_NAME }}'
+            CONTAINER_NAME='${{ env.CONTAINER_NAME }}'
+            ENV_PATH='${{ env.ENV_PATH }}'
+            APP_PORT='${{ env.APP_PORT }}'
+      
+            # 1) Docker Hub 로그인 (토큰을 표준입력으로 전달)
+            printf "%s" "\$DOCKERHUB_TOKEN" | docker login -u "\$DOCKERHUB_USERNAME" --password-stdin || true
+      
+            # 2) 최신 이미지 pull
+            docker pull "\$IMAGE_NAME:latest"
+      
+            # 3) 기존 컨테이너 교체
+            docker stop "\$CONTAINER_NAME" || true
+            docker rm   "\$CONTAINER_NAME" || true
             docker image prune -f || true
-
-            docker run -d --name ${CONTAINER_NAME} \
+      
+            # 4) 재기동: 127.0.0.1:APP_PORT -> 8080 (Nginx 프록시)
+            docker run -d --name "\$CONTAINER_NAME" \
               --restart unless-stopped \
-              -p 127.0.0.1:${APP_PORT}:8080 \
-              --env-file ${ENV_PATH} \
-              ${IMAGE_NAME}:latest
-
-            sleep 3
-            curl -s -I http://127.0.0.1:${APP_PORT} || true
+              -p 127.0.0.1:"\$APP_PORT":8080 \
+              --env-file "\$ENV_PATH" \
+              "\$IMAGE_NAME:latest"
+      
+            # 5) 상태 점검
+            sleep 2
+            curl -s -I http://127.0.0.1:"\$APP_PORT" || true
           EOF
