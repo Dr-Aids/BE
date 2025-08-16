@@ -38,7 +38,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+      - name: Ensure gradlew is executable in workspace
+        run: |
+          chmod +x gradlew
+          sed -i 's/\r$//' gradlew || true
+          ls -l gradlew
       - name: Build and Push (with GHA cache)
         uses: docker/build-push-action@v6
         with:
