@@ -1,10 +1,26 @@
+# VCS
 .git
 .gitignore
+
+# Build / tool junk
 .gradle
 build
 out
-node_modules
-.env
-*.iml
 .idea
 .vscode
+*.iml
+
+# OS noise
+**/.DS_Store
+
+# Tests (이미지엔 불필요)
+src/test
+
+# Node leftovers (있다면)
+node_modules
+**/node_modules
+
+# Secrets (절대 이미지에 포함 X)
+.env
+*.env
+.env.*
