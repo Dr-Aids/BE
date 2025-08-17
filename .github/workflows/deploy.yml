@@ -84,6 +84,7 @@ jobs:
             CONTAINER_NAME='${{ env.CONTAINER_NAME }}'
             ENV_PATH='${{ env.ENV_PATH }}'
             APP_PORT='${{ env.APP_PORT }}'
+            TAG='${{ github.sha}}'
 
            # 디스크 여유 적을 때 대비(선택)
             docker system df || true
