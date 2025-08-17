@@ -8,7 +8,7 @@ on:
 env:
   IMAGE_NAME: saycando/myapp
   CONTAINER_NAME: myapp
-  ENV_PATH: /etc/dr-aids/app.env
+  ENV_PATH: /home/ubuntu/.env
   APP_PORT: "8080"
 
 jobs:
