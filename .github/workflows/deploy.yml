@@ -90,8 +90,8 @@ jobs:
             docker system df || true
             
             # 1) Docker Hub 로그인 (토큰을 표준입력으로 전달)
-            printf "%s" "\$DOCKERHUB_TOKEN" | docker login -u "\$DOCKERHUB_USERNAME" --password-stdin || true
-            docker pull "\$IMAGE_NAME:$TAG"
+            #printf "%s" "\$DOCKERHUB_TOKEN" | docker login -u "\$DOCKERHUB_USERNAME" --password-stdin || true
+            docker pull "\$IMAGE_NAME:\$TAG"
 
            # 2) 기존 종료/정리
             docker stop "\$CONTAINER_NAME" || true
@@ -103,7 +103,7 @@ jobs:
               --restart unless-stopped \
               -p 127.0.0.1:"\$APP_PORT":8080 \
               --env-file "\$ENV_PATH" \
-              "\$IMAGE_NAME:$TAG"
+              "\$IMAGE_NAME:\$TAG"
       
             # 5) 상태 점검
             sleep 2
