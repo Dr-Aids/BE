@@ -84,7 +84,7 @@ jobs:
             CONTAINER_NAME='${{ env.CONTAINER_NAME }}'
             ENV_PATH='${{ env.ENV_PATH }}'
             APP_PORT='${{ env.APP_PORT }}'
-            TAG='${{ github.sha }}'  # 커밋 SHA
+            TAG='${{ github.sha }}'
 
             # === 필수 변수 검증 ===
             [ -n "$DOCKERHUB_USERNAME" ] || { echo "ERROR: DOCKERHUB_USERNAME empty"; exit 1; }
@@ -106,11 +106,6 @@ jobs:
            # 2) 기존 종료/정리
             docker stop "$CONTAINER_NAME" || true
             docker rm   "$CONTAINER_NAME" || true
-            docker image prune -f || true
-      
-            # 3) 기존 컨테이너 교체
-            docker stop "\$CONTAINER_NAME" || true
-            docker rm   "\$CONTAINER_NAME" || true
             docker image prune -f || true
       
              # 3) 재기동 (루프백만 바인딩 → Nginx가 프록시)
