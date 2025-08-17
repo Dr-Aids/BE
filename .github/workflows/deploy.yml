@@ -74,7 +74,7 @@ jobs:
           
       - name: Deploy on EC2 (pull & restart container)
         run: |
-          ssh -i key.pem -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
+          ssh -i key.pem -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<'EOF'
             set -euo pipefail
       
             # === GitHub Actions 값들을 원격 쉘 변수로 '주입' ===
