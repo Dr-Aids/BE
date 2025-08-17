@@ -71,34 +71,19 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
-
-      # 시크릿/환경값이 비면 바로 실패(러너 쪽에서)
-      - name: Preflight check (secrets present)
-        run: |
-          test -n "${{ secrets.DOCKERHUB_USERNAME }}" || (echo "DOCKERHUB_USERNAME missing"; exit 1)
-          test -n "${{ secrets.DOCKERHUB_TOKEN }}"    || (echo "DOCKERHUB_TOKEN missing"; exit 1)
-          test -n "${{ secrets.EC2_HOST }}"           || (echo "EC2_HOST missing"; exit 1)
-          test -n "${{ secrets.EC2_USER }}"           || (echo "EC2_USER missing"; exit 1)
-          test -n "${{ secrets.EC2_SSH_KEY }}"        || (echo "EC2_SSH_KEY missing"; exit 1)
-          test -n "${{ env.IMAGE_NAME }}"             || (echo "IMAGE_NAME missing"; exit 1)
-          test -n "${{ env.CONTAINER_NAME }}"         || (echo "CONTAINER_NAME missing"; exit 1)
-          test -n "${{ env.ENV_PATH }}"               || (echo "ENV_PATH missing"; exit 1)
-          test -n "${{ env.APP_PORT }}"               || (echo "APP_PORT missing"; exit 1)
-          test -n "${{ github.sha }}"                 || (echo "github.sha missing"; exit 1)
           
       - name: Deploy on EC2 (pull & restart container)
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
             set -euo pipefail
-
-          # === GitHub Actions 값들을 원격 쉘 변수로 '주입' ===
+      
+            # === GitHub Actions 값들을 원격 쉘 변수로 '주입' ===
             DOCKERHUB_USERNAME='${{ secrets.DOCKERHUB_USERNAME }}'
             DOCKERHUB_TOKEN='${{ secrets.DOCKERHUB_TOKEN }}'
             IMAGE_NAME='${{ env.IMAGE_NAME }}'
             CONTAINER_NAME='${{ env.CONTAINER_NAME }}'
             ENV_PATH='${{ env.ENV_PATH }}'
             APP_PORT='${{ env.APP_PORT }}'
-            TAG='${{ github.sha }}'  # 커밋 SHA
 
             # === 필수 변수 검증 ===
             [ -n "$DOCKERHUB_USERNAME" ] || { echo "ERROR: DOCKERHUB_USERNAME empty"; exit 1; }
