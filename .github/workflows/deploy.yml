@@ -77,33 +77,27 @@ jobs:
           ssh -i key.pem -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<'EOF'
             set -euo pipefail
       
-            # === GitHub Actions 값들을 원격 쉘 변수로 '주입' ===
-            DOCKERHUB_USERNAME='${{ secrets.DOCKERHUB_USERNAME }}'
-            DOCKERHUB_TOKEN='${{ secrets.DOCKERHUB_TOKEN }}'
+            # 값 주입 (최상단)
             IMAGE_NAME='${{ env.IMAGE_NAME }}'
             CONTAINER_NAME='${{ env.CONTAINER_NAME }}'
             ENV_PATH='${{ env.ENV_PATH }}'
             APP_PORT='${{ env.APP_PORT }}'
-            TAG='${{ github.sha}}'
-
+            TAG='${{ github.sha }}'
            # 디스크 여유 적을 때 대비(선택)
             docker system df || true
             
-            # 1) Docker Hub 로그인 (토큰을 표준입력으로 전달)
-            #printf "%s" "\$DOCKERHUB_TOKEN" | docker login -u "\$DOCKERHUB_USERNAME" --password-stdin || true
-            docker pull "\$IMAGE_NAME:\$TAG"
-
-           # 2) 기존 종료/정리
-            docker stop "\$CONTAINER_NAME" || true
-            docker rm   "\$CONTAINER_NAME" || true
+            # 이미지 풀 (★ 역슬래시 없이 $변수 그대로!)
+            docker pull "$IMAGE_NAME:$TAG"
+      
+            docker stop "$CONTAINER_NAME" || true
+            docker rm   "$CONTAINER_NAME" || true
             docker image prune -f || true
       
-             # 3) 재기동 (루프백만 바인딩 → Nginx가 프록시)
-            docker run -d --name "\$CONTAINER_NAME" \
+            docker run -d --name "$CONTAINER_NAME" \
               --restart unless-stopped \
-              -p 127.0.0.1:"\$APP_PORT":8080 \
-              --env-file "\$ENV_PATH" \
-              "\$IMAGE_NAME:\$TAG"
+              -p 127.0.0.1:"$APP_PORT":8080 \
+              --env-file "$ENV_PATH" \
+              "$IMAGE_NAME:$TAG"
       
             # 5) 상태 점검
             sleep 2
