@@ -8,7 +8,7 @@ on:
 env:
   IMAGE_NAME: saycando/myapp
   CONTAINER_NAME: myapp
-  ENV_PATH: /home/ubuntu/app/.env
+  ENV_PATH: /home/ubuntu/app/BE/.env
   APP_PORT: "8080"
 
 jobs:
@@ -38,11 +38,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
       - name: Ensure gradlew is executable in workspace
         run: |
           chmod +x gradlew
           sed -i 's/\r$//' gradlew || true
           ls -l gradlew
+          
       - name: Build and Push (with GHA cache)
         uses: docker/build-push-action@v6
         with:
@@ -54,8 +56,6 @@ jobs:
             saycando/myapp:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          no-cache: true         # ← 이번 런만 넣었다가, 통과 후엔 빼도 됨
-
 
   deploy:
     name: Deploy to EC2
@@ -84,24 +84,28 @@ jobs:
             CONTAINER_NAME='${{ env.CONTAINER_NAME }}'
             ENV_PATH='${{ env.ENV_PATH }}'
             APP_PORT='${{ env.APP_PORT }}'
+            TAG='${{ github.sha }}'   # ← 이번 배포 커밋 해시로 고정
       
             # 1) Docker Hub 로그인 (토큰을 표준입력으로 전달)
-            printf "%s" "\$DOCKERHUB_TOKEN" | docker login -u "\$DOCKERHUB_USERNAME" --password-stdin || true
-      
-            # 2) 최신 이미지 pull
-            docker pull "\$IMAGE_NAME:latest"
+            printf "%s" "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin || true
+            docker pull "$IMAGE_NAME:$TAG"
+
+           # 2) 기존 종료/정리
+            docker stop "$CONTAINER_NAME" || true
+            docker rm   "$CONTAINER_NAME" || true
+            docker image prune -f || true
       
             # 3) 기존 컨테이너 교체
             docker stop "\$CONTAINER_NAME" || true
             docker rm   "\$CONTAINER_NAME" || true
             docker image prune -f || true
       
-            # 4) 재기동: 127.0.0.1:APP_PORT -> 8080 (Nginx 프록시)
-            docker run -d --name "\$CONTAINER_NAME" \
+             # 3) 재기동 (루프백만 바인딩 → Nginx가 프록시)
+            docker run -d --name "$CONTAINER_NAME" \
               --restart unless-stopped \
-              -p 127.0.0.1:"\$APP_PORT":8080 \
-              --env-file "\$ENV_PATH" \
-              "\$IMAGE_NAME:latest"
+              -p 127.0.0.1:"$APP_PORT":8080 \
+              --env-file "$ENV_PATH" \
+              "$IMAGE_NAME:$TAG"
       
             # 5) 상태 점검
             sleep 2
