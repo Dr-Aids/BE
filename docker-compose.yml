@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      -  /etc/dr-aids/app.env
+      -  /home/ubuntu/.env
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://${DB_HOST}:${DB_PORT:-3306}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
