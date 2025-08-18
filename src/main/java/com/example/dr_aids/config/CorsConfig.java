@@ -13,10 +13,20 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://draids.site", "https://localhost:3000", "https://localhost:8080")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        // allowedOrigins → http/https 모두 정확히 지정
+                        .allowedOriginPatterns(
+                                "http://localhost:3000",
+                                "https://localhost:3000",
+                                "http://localhost:8080",
+                                "https://localhost:8080",
+                                "https://draids.site",
+                                "https://*.draids.site"
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // <- 쿠키
+                        .exposedHeaders("Authorization", "Location")
+                        .allowCredentials(true)
+                        .maxAge(3600);
             }
         };
     }
