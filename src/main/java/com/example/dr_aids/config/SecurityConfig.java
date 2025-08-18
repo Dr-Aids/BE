@@ -55,13 +55,21 @@ public class SecurityConfig {
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
+                    // 프론트/스웨거/배포 도메인 (http/https 모두)
                     config.setAllowedOriginPatterns(Arrays.asList(
-                            "http://localhost:3000"
+                            "http://localhost:3000",
+                            "https://localhost:3000",
+                            "http://localhost:8080",
+                            "https://localhost:8080",
+                            "https://draids.site",
+                            "https://*.draids.site"
                     ));
-                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH")); // 허용할 HTTP 메서드
+                    // ← OPTIONS 반드시 포함
+                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                     config.setAllowCredentials(true);
-                    config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // 허용할 헤더
-                    config.setExposedHeaders(Collections.singletonList("Authorization")); // 노출할 헤더
+                    // 프리플라이트 헤더 전부 허용
+                    config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setExposedHeaders(Arrays.asList("Authorization", "Location"));
                     config.setMaxAge(3600L); // 캐싱 시간
                     return config;
                 }))
@@ -70,14 +78,14 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // 프리플라이트 전부 허용 (중요)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/login", "/join", "/reissue",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
-
                         ).permitAll()
                         .anyRequest().permitAll() //개발 중
                 );
-
         // JWT 필터 & 커스텀 필터 설정
         http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
         http.addFilterBefore(new JWTFilter(jwtUtil, userRepository), LoginFilter.class);
