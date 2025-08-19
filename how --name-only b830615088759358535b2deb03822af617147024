@@ -1,0 +1,532 @@
+[33mcommit b830615088759358535b2deb03822af617147024[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m)[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Tue Aug 19 14:06:41 2025 +0900
+
+    ai 측 전달 dto List로 변환
+
+[33mcommit bf7fa0a9a10b6c5443d507dca7024ae58ed37910[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Mon Aug 18 19:31:22 2025 +0900
+
+    cors 해결
+
+[33mcommit c70a2ce62e59954af6579471fce84deb30839241[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 20:12:59 2025 +0900
+
+    스웨거 설정 변경
+
+[33mcommit d888e198e4e3229945e0092779bf76dad12b9bba[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 18:48:06 2025 +0900
+
+    ci: trigger pipeline
+
+[33mcommit cffad0fae6ad0832f6be8565c376eaf339f93ea0[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 18:37:15 2025 +0900
+
+    dockerifle 수정
+
+[33mcommit 2236dbb7977512553347cbf83fd8249a50542fb4[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 18:28:10 2025 +0900
+
+    ci: trigger pipeline
+
+[33mcommit ec96774e0f9cbb3718967027ed9a23d0313039e0[m
+Merge: 6d00994 59532b9
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:47:28 2025 +0900
+
+    Merge branch 'main' of https://github.com/Dr-Aids/BE into dev
+
+[33mcommit 6d0099424c0ffdaf065131b3cf6132a81837669a[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:47:15 2025 +0900
+
+    docker-compose rewrite
+
+[33mcommit 59532b9c117c7eb4430b8ad171ca809b49df5c0a[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:46:58 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 76b94bbc1f4ef54614aae220ff211ba013e5ea15[m
+Merge: 469254b 9c0b8ea
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:38:26 2025 +0900
+
+    Merge pull request #25 from Dr-Aids/dev
+    
+    Merge pull request #19 from Dr-Aids/main
+
+[33mcommit 469254b9f073a71b99ed94017ff59e4d659fc680[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:37:58 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit cd7755c30a66dce9e0be10d2ad05fc355f26de7d[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:36:50 2025 +0900
+
+    도커 컴포즈  수정
+
+[33mcommit 9c0b8ea18825d63307d7624c0d5d879da7c9ceb3[m
+Merge: 08f1467 e427c1f
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:28:35 2025 +0900
+
+    Merge pull request #19 from Dr-Aids/main
+    
+    ci/cd 구축중
+
+[33mcommit e427c1f0e892b6074c924c4190e6efe023bbe7cc[m
+Merge: 57135bd 08f1467
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:25:53 2025 +0900
+
+    Merge pull request #24 from Dr-Aids/dev
+    
+    도커 컴포즈 수정
+
+[33mcommit 57135bd6687b17a5f2fa3108b95c4a345c57c146[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:22:11 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 6977c2c8ac6fed6a7aba5861cf38fb3b8c77d941[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:17:06 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 13f02fef6f92654ad7dee0157457fb27a7b972dd[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:12:40 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit b80e19877a8d0e325dc4449534047682c180d607[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 17:03:07 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 22e6747c313abd969dacb0fed3d5e2a1d5c37171[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:59:57 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 0c5e42af008b164faf599e57d6e6f9040c76e478[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:54:20 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit feff31bdfe1610752a005e8b4e4410bce4656900[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:50:34 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 6d4390f3f3322a68a3b4eb8a86b6ef8d1c8fe342[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:45:55 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 23be9f77559704395d6323fc1d9f6e1a376596c2[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:36:38 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 08f14678444ccba075c6fb21c935c593cf1cc77a[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:29:38 2025 +0900
+
+    도커 컴포즈 수정
+
+[33mcommit f814d2f699bcd264fab5f708e721c6b51e05b7dd[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 17 16:25:02 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 3f19d1999eafaf383bebadad462d030b0d81d966[m
+Merge: a70fadf 5ad606f
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 23:12:48 2025 +0900
+
+    Merge pull request #23 from Dr-Aids/dev
+    
+    dockerfile 수정
+
+[33mcommit 5ad606f94572296a6805a5f1db62302282d21a75[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 23:12:28 2025 +0900
+
+    dockerfile 수정
+
+[33mcommit a70fadfd178e9f49e671740fe3fb4def39d19065[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 22:13:52 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 73b7e7cab5b2c6105482b7db4d5d40e10071a6fd[m
+Merge: c3e593d d3d0ccf
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 22:09:33 2025 +0900
+
+    Merge pull request #22 from Dr-Aids/dev
+    
+    dockerfile 수정
+
+[33mcommit d3d0ccf26cbf399763b17b6cbb516b2ae5816086[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 22:09:10 2025 +0900
+
+    dockerfile 수정
+
+[33mcommit c3e593d8cf2826de947c363fc66841c5ed2d4e60[m
+Merge: d0582fd b1e459b
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 22:05:39 2025 +0900
+
+    Merge pull request #21 from Dr-Aids/dev
+    
+    dockerfile 수정
+
+[33mcommit b1e459bf34ec90fed643f42c47a513ecde6bbd26[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 22:05:09 2025 +0900
+
+    dockerfile 수정
+
+[33mcommit d0582fdb0fa011ca11f56da7b9ee2299d58c396b[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 22:01:50 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit a7832884f2f5bae3711178473af21a5e127300b7[m
+Merge: d7f4c87 144c5bd
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:56:21 2025 +0900
+
+    Merge pull request #20 from Dr-Aids/dev
+    
+    dockerfile 수정
+
+[33mcommit 144c5bd60bb35b08b4c72a41050fee3db6e544df[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:55:49 2025 +0900
+
+    dockerfile 수정
+
+[33mcommit d7f4c87346b19222a9d3d063aa8bdc016c8cf7b1[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:55:40 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 7a791be0ab1a6d2264b8def44615447a7981e2c7[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:40:14 2025 +0900
+
+    dockerfile 수정
+
+[33mcommit 95b72fa5eb978b7a08699908b0df61921d7da3e2[m
+Merge: 8c9fb39 03e8224
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:36:46 2025 +0900
+
+    Merge pull request #18 from Dr-Aids/dev
+    
+    chore: make gradlew executable
+
+[33mcommit 03e82244030f3a86ca82aff103f3df34fad88cfb[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:36:10 2025 +0900
+
+    chore: make gradlew executable
+
+[33mcommit 8c9fb391da6e701489fc866b10d43f267ef3839e[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:31:44 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit e6f2cbfd9a0d7c9a2ab225863ab63c1877729428[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:22:53 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 468ad72940f42b446e9a14790a17db7758d718e7[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:19:41 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit b06c409030febbf7d74b015bdd2c0d2d6b5942a7[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:18:18 2025 +0900
+
+    Update deploy.yml
+
+[33mcommit 99b3e5262e4825bc5789081a745477ca5101c4b4[m
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 21:02:54 2025 +0900
+
+    Create deploy.yml
+
+[33mcommit c43cc2096b436390029dd74c5616f3816281b4d6[m
+Merge: 05dc78a b56897f
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 16:20:26 2025 +0900
+
+    Merge pull request #17 from Dr-Aids/dev
+    
+    도커 컴포즈 수정
+
+[33mcommit b56897f845789eb6d2db9682a693fd00ca33abd5[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 16 16:19:56 2025 +0900
+
+    도커 컴포즈 수정
+
+[33mcommit 05dc78a8bedebb584ead1bf14d6471a28522255e[m
+Merge: 1c0cd28 3600834
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 22:40:45 2025 +0900
+
+    Merge pull request #16 from Dr-Aids/dev
+    
+    배포 경고 해결
+
+[33mcommit 3600834d1a7b876934a1478af1c941f15c087490[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 22:40:20 2025 +0900
+
+    배포 경고 해결
+
+[33mcommit 1c0cd28908af2982603d3a0109208ff91adaff2b[m
+Merge: 31f376a 8061f6f
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 22:04:21 2025 +0900
+
+    Merge pull request #15 from Dr-Aids/dev
+    
+    배포 설정
+
+[33mcommit 8061f6ff91213727c3084255be1ac2e94f8bbf95[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 22:03:46 2025 +0900
+
+    배포 설정
+
+[33mcommit 31f376a599fc7eb35020e18d5f7e136f62c35b66[m
+Merge: 5f3bb0f cc6ab8f
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 20:41:18 2025 +0900
+
+    Merge pull request #14 from Dr-Aids/dev
+    
+    도커 compose 수정
+
+[33mcommit cc6ab8fb5541130f04e15854a2c317eb6c361aff[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 20:40:32 2025 +0900
+
+    도커 compose 수정
+
+[33mcommit 5f3bb0f811a365972b9cab2c0f2494f7a66440ba[m
+Merge: 389b253 f097640
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 20:16:35 2025 +0900
+
+    Merge pull request #13 from Dr-Aids/dev
+    
+    배포
+
+[33mcommit f09764014b4825d0a19e22307d189810bb6d38d4[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 20:16:14 2025 +0900
+
+    build 오류 해결
+
+[33mcommit 4749708b869413842323a600a55d445f5e6a4bab[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Aug 15 19:28:37 2025 +0900
+
+    배포 준비
+
+[33mcommit db46ff413545fbc61212219d048bcfd54da43c55[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 10 16:22:31 2025 +0900
+
+    feat : 혈액 검사 구현
+
+[33mcommit 859188a5d2a3d4ab9fd490d1e1dc528ff64dfe20[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Aug 10 15:26:10 2025 +0900
+
+    feat : 조혈제 처방 CRUD 구현
+
+[33mcommit 389b25392b1c62b7813da9b441511c51673d7fa5[m
+Merge: 913ed2f b498e2d
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 9 19:54:35 2025 +0900
+
+    Merge pull request #12 from Dr-Aids/dev
+    
+    [FEATURE] 특이사항 구현
+
+[33mcommit b498e2d431dd02a563705232bd4179bddfc32e7a[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 9 19:54:15 2025 +0900
+
+    docs : 특이사항 docs 작성
+
+[33mcommit e3f9fec338d2a30a2eb94e4ce4e0b26459e090e2[m
+Merge: 8726805 d65c476
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 9 19:34:01 2025 +0900
+
+    chore : merge conflict 해결
+
+[33mcommit 8726805305ff12098ab5b8ecf91399cd3db8892f[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Aug 9 19:28:05 2025 +0900
+
+    feat : 특이사항 전체 조회 및 개인 조회 구현
+
+[33mcommit 0a0a90e7980ee8ea748436c0bd3d16919dce68d1[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Jul 26 02:02:01 2025 +0900
+
+    feat : 특이사항 혈압, 체중 구현
+
+[33mcommit d5b17d5de05ec7abfcceec4fa2e6f1b0e67271f6[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sat Jul 26 01:01:37 2025 +0900
+
+    feat : 특이사항 구현
+
+[33mcommit 42f3e592e2aefa159f7c389355e50cdca624db19[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Jul 25 20:49:01 2025 +0900
+
+    docs : BloodPressure Docs 작성
+
+[33mcommit 9d529a089341da0d950652c2cad2a71058638d0c[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Fri Jul 25 20:24:12 2025 +0900
+
+    feat : 혈압 관련 CRUD 구현
+
+[33mcommit 0e5be20d8ec6fa404bfe9394279b762a7aebaa2f[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Thu Jul 24 21:41:20 2025 +0900
+
+    docs : docs 설정
+
+[33mcommit 5378c092eaaafc203664a7a8de6ff8b378fa2b8e[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Thu Jul 24 18:51:08 2025 +0900
+
+    feat : average Weight
+
+[33mcommit ea1b5e7a71f2ea03d310b0c71211131d6967b2bc[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Thu Jul 24 17:44:28 2025 +0900
+
+    feat : weight CRUD 구현
+
+[33mcommit db04d6f78ba2830e9ab8e38efc42c07a23e4a7e9[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Thu Jul 24 00:28:32 2025 +0900
+
+    feat : 회원 가입시, 병원 필수 수정
+
+[33mcommit 913ed2fd5f9374198b0804dc48bcbd17b94b80bf[m
+Merge: 58c3022 d65c476
+Author: Kim Sehee <133561400+saeeyes@users.noreply.github.com>
+Date:   Thu Jul 24 00:04:09 2025 +0900
+
+    Merge pull request #9 from Dr-Aids/dev
+    
+    [FEATURE] 환자 정보 구현
+
+[33mcommit 2379104e3e4a236cc14126e284b7d3d290386d31[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 23 23:59:49 2025 +0900
+
+    feat : 환자 회차별 조회 기능 구현
+
+[33mcommit d65c4763d39f418dbe08c4727dc9ffc96466ad03[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 23 23:59:49 2025 +0900
+
+    feat : 환자 기본 정보 구현
+
+[33mcommit 044fa0c2a0218b9f0e2c231ddff2029194c9b498[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 23 23:13:16 2025 +0900
+
+    feat : 환자 회차별 정보 조회 구현
+
+[33mcommit a38632dbf30570c2405c298c0669dd22589b8cc1[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 23 17:45:02 2025 +0900
+
+    feat : 환자 방문기록 수정
+
+[33mcommit 56c067ee138c905f1b0227d5d967a125dd06a08d[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 23 16:22:27 2025 +0900
+
+    feat : 환자 목록 조회 구현
+
+[33mcommit 1d5c3a19f2cd543555368e4d5d61ddf9987fe687[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 23 14:41:35 2025 +0900
+
+    feat : 환자 기본 정보 조회
+
+[33mcommit 8fb7576567bb6412792662e416f0265d4ee5ed9c[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Mon Jul 21 21:36:50 2025 +0900
+
+    feat : 환자 정보 CRUD 구현
+
+[33mcommit 497967a3f3e2c3ef397408d78a2f7556994480ae[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Jul 20 16:28:13 2025 +0900
+
+    feat : 사용자 기능 구현
+
+[33mcommit ffde5c2dc02742f34eeeee94a622d67ec3ac230a[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Jul 20 16:08:05 2025 +0900
+
+    chore : entity filed 수정
+
+[33mcommit 70ad270d4bbe1cfd1819acbe28649637449706ba[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Sun Jul 20 15:15:48 2025 +0900
+
+    feat: 도메인 엔티티 및 연관관계
+
+[33mcommit 1b513fd9d221cedde5453fbbea08b9e2f9ad15f3[m
+Author: saeeyes <133561400+saeeyes@users.noreply.github.com>
+Date:   Wed Jul 16 13:39:32 2025 +0900
+
+    feat : Assignment create

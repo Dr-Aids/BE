@@ -7,6 +7,8 @@ import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("blood-test")
@@ -14,8 +16,8 @@ public class BloodTestController {
     private final BloodTestService bloodTestService;
 
     @PostMapping("/ai")
-    public ResponseEntity<?> saveBloodTest(@RequestBody BloodTestDto bloodTestDto){
-        bloodTestService.saveBloodTest(bloodTestDto);
+    public ResponseEntity<?> saveBloodTest(@RequestBody List<BloodTestDto> bloodTestDto){
+        bloodTestService.saveBloodTests(bloodTestDto);
         return ResponseEntity.ok("혈액검사 저장 완료되었습니다.");
     }
 

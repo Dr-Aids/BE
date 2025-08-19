@@ -13,9 +13,12 @@ import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,21 +26,54 @@ public class BloodTestService {
     private final BloodTestRepository bloodTestRepository;
     private final PatientRepository patientRepository;
 
-    public void saveBloodTest(BloodTestDto bloodTestDto) {
-        Patient patient = patientRepository.findById(bloodTestDto.getPatientId())
-                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+    @Transactional
+    public void saveBloodTests(List<BloodTestDto> bloodTestDtos) {
+        if (bloodTestDtos == null || bloodTestDtos.isEmpty()) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST, "혈액검사 목록이 비어있습니다.");
+        }
 
-        BloodTest bloodTest = new BloodTest();
-        bloodTest.setDate(LocalDate.parse(bloodTestDto.getDate()));
-        bloodTest.setIron(bloodTestDto.getIron());
-        bloodTest.setFerritine(bloodTestDto.getFerritine());
-        bloodTest.setTIBC(bloodTestDto.getTIBC());
-        bloodTest.setPTH(bloodTestDto.getPTH());
-        bloodTest.setHemoglobin(bloodTestDto.getHemoglobin());
-        bloodTest.setHematocrit(bloodTestDto.getHematocrit());
-        bloodTest.setPatient(patient);
+        // 1) 환자 ID 모아서 한 번에 로드
+        Set<Long> patientIds = bloodTestDtos.stream()
+                .map(BloodTestDto::getPatientId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
-        bloodTestRepository.save(bloodTest);
+        Map<Long, Patient> patientMap = patientRepository.findAllById(patientIds).stream()
+                .collect(Collectors.toMap(Patient::getId, p -> p));
+
+        // 2) 없는 환자 ID 체크 (있으면 한 번에 예외)
+        List<Long> missingIds = patientIds.stream()
+                .filter(id -> !patientMap.containsKey(id))
+                .toList();
+        if (!missingIds.isEmpty()) {
+            throw new CustomException(
+                    ErrorCode.PATIENT_NOT_FOUND,
+                    "존재하지 않는 환자 ID: " + missingIds
+            );
+        }
+
+        // 3) 엔티티 변환 (배치 생성)
+        DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE; // "yyyy-MM-dd" 기대
+        List<BloodTest> toSave = new ArrayList<>(bloodTestDtos.size());
+
+        for (BloodTestDto dto : bloodTestDtos) {
+            Patient patient = patientMap.get(dto.getPatientId());
+
+            BloodTest bloodTest = new BloodTest();
+            bloodTest.setDate(LocalDate.parse(dto.getDate(), fmt));
+            bloodTest.setIron(dto.getIron());
+            bloodTest.setFerritine(dto.getFerritine());
+            bloodTest.setTIBC(dto.getTIBC());
+            bloodTest.setPTH(dto.getPTH());
+            bloodTest.setHemoglobin(dto.getHemoglobin());
+            bloodTest.setHematocrit(dto.getHematocrit());
+            bloodTest.setPatient(patient);
+
+            toSave.add(bloodTest);
+        }
+
+        // 4) 배치 저장
+        bloodTestRepository.saveAll(toSave);
     }
 
     public List<BloodTestAllResponseDto> getBloodTestAll( Long patientId, String targetDate) {

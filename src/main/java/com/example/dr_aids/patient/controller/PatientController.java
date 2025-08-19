@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController implements PatientControllerDocs {
 
     private final PatientService patientService;
+    private final ApiKeyValidator apiKeyValidator;
 
     @PostMapping("/info") // 환자 정보 저장
     public ResponseEntity<?> savePatientInfo(@RequestBody PatientInfoRequestDto patientInfoRequestDto) {
@@ -59,4 +60,11 @@ public class PatientController implements PatientControllerDocs {
         patientService.updatePatientVisitingStatus(id, patientVisitindRequestDto);
         return ResponseEntity.ok("환자 방문 여부가 수정되었습니다.");
     }
+
+    @GetMapping("/list/ai")
+    public ResponseEntity<?> getPatientListByAi(@RequestHeader("Authorization") String apiKey) {
+
+        return ResponseEntity.ok(patientService.getPatientListByAi());
+    }
+
 }

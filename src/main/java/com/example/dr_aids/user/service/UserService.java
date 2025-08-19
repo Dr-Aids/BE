@@ -29,10 +29,10 @@ public class UserService {
     public void updateUser(User user, UserUpdateDTO requestDTO) {
 
         // 수정할 필드만 반영 (null인 건 무시할 수도 있음)
-        if (requestDTO.getUsername() != null) {
+        if (requestDTO.getUsername() != null && !requestDTO.getUsername().isBlank()) {
             user.setUsername(requestDTO.getUsername());
         }
-        if (requestDTO.getRole() != null) {
+        if (requestDTO.getRole() != null && !requestDTO.getRole().isBlank()) {
             user.setRole(Role.valueOf(requestDTO.getRole()));
         }
 
