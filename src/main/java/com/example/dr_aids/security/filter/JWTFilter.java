@@ -25,10 +25,10 @@ public class JWTFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final List<String> aiWhitelistPaths;
 
-    public JWTFilter(JWTUtil jwtUtil, UserRepository userRepository, List<String> aiWhitelistPaths){
+    public JWTFilter(JWTUtil jwtUtil, UserRepository userRepository, List<String> aiWhitelistPaths) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
-        this.aiWhitelistPaths = aiWhitelistPaths;
+        this.aiWhitelistPaths = aiWhitelistPaths; // AI 경로 화이트리스트
     }
 
     @Override
