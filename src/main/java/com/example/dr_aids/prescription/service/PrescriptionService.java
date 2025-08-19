@@ -12,6 +12,7 @@ import com.example.dr_aids.prescription.domain.PrescriptionRewriteDto;
 import com.example.dr_aids.prescription.repository.PrescriptionRepository;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,19 +29,46 @@ public class PrescriptionService {
     private final PrescriptionRepository prescriptionRepository;
     private final PatientRepository patientRepository;
 
-    public void savePrescription(PrescriptionDto prescriptionDto) {
+    @Transactional
+    public void savePrescriptions(List<PrescriptionDto> prescriptionDtos) {
+        if (prescriptionDtos == null || prescriptionDtos.isEmpty()) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST, "처방 목록이 비어있습니다.");
+        }
 
-        Patient patient = patientRepository.findById(prescriptionDto.getPatientId())
-                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+        // 1) 환자 ID 모아서 한 번에 조회
+        Set<Long> patientIds = prescriptionDtos.stream()
+                .map(PrescriptionDto::getPatientId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
-        Prescription prescription = new Prescription();
-        prescription.setDate(LocalDate.parse(prescriptionDto.getDate()));
-        prescription.setHematapoieticAgent(prescriptionDto.getHematapoieticAgent());
-        prescription.setIU(prescriptionDto.getIU());
-        prescription.setDescription(prescriptionDto.getDescription());
-        prescription.setPatient(patient);
+        Map<Long, Patient> patientMap = patientRepository.findAllById(patientIds).stream()
+                .collect(Collectors.toMap(Patient::getId, p -> p));
 
-        prescriptionRepository.save(prescription);
+        // 2) 없는 환자 ID 체크 (있으면 한 번에 예외)
+        List<Long> missingIds = patientIds.stream()
+                .filter(id -> !patientMap.containsKey(id))
+                .toList();
+        if (!missingIds.isEmpty()) {
+            throw new CustomException(ErrorCode.PATIENT_NOT_FOUND, "존재하지 않는 환자 ID: " + missingIds);
+        }
+
+        // 3) 엔티티 변환
+        List<Prescription> toSave = new ArrayList<>(prescriptionDtos.size());
+        for (PrescriptionDto dto : prescriptionDtos) {
+            Patient patient = patientMap.get(dto.getPatientId());
+
+            Prescription prescription = new Prescription();
+            prescription.setDate(LocalDate.parse(dto.getDate())); // "yyyy-MM-dd" 기대
+            prescription.setHematapoieticAgent(dto.getHematapoieticAgent());
+            prescription.setIU(dto.getIU());
+            prescription.setDescription(dto.getDescription());
+            prescription.setPatient(patient);
+
+            toSave.add(prescription);
+        }
+
+        // 4) 배치 저장
+        prescriptionRepository.saveAll(toSave);
     }
 
     public List<PrescriptionResponseDto> getPrescriptions(Long patientId, String targetDate) {

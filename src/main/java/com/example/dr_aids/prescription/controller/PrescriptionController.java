@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/prescriptions")
@@ -16,8 +18,8 @@ public class PrescriptionController {
     private final PrescriptionService prescriptionService;
 
     @PostMapping("/ai")
-    public ResponseEntity<?> savePrescription(@RequestBody PrescriptionDto prescriptionDto) {
-        prescriptionService.savePrescription(prescriptionDto);
+    public ResponseEntity<?> savePrescription(@RequestBody List<PrescriptionDto> prescriptionDto) {
+        prescriptionService.savePrescriptions(prescriptionDto);
         return ResponseEntity.ok("처방전이 저장되었습니다.");
     }
 
