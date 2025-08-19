@@ -93,9 +93,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/login", "/join", "/reissue",
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**",
-
-                                // AI 경로 화이트리스트
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",           // ✅ swagger 직접 접근용
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/favicon.ico",               // ✅ 웹 브라우저 기본 요청 허용
                                 "/patient/list/ai",
                                 "/prescriptions/ai",
                                 "/blood-test/ai"

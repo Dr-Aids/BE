@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -54,9 +55,12 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
+        AntPathMatcher pathMatcher = new AntPathMatcher();
 
-        return excludePaths.contains(path) || aiWhitelistPaths.contains(path);
+        return excludePaths.stream().anyMatch(p -> pathMatcher.match(p, path)) ||
+                aiWhitelistPaths.stream().anyMatch(p -> pathMatcher.match(p, path));
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
