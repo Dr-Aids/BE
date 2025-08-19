@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController implements PatientControllerDocs {
 
     private final PatientService patientService;
-    private final ApiKeyValidator apiKeyValidator;
 
     @PostMapping("/info") // 환자 정보 저장
     public ResponseEntity<?> savePatientInfo(@RequestBody PatientInfoRequestDto patientInfoRequestDto) {

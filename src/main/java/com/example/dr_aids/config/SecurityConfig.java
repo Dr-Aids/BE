@@ -1,5 +1,6 @@
 package com.example.dr_aids.config;
 
+import com.example.dr_aids.security.common.AIProperties;
 import com.example.dr_aids.security.common.JWTUtil;
 import com.example.dr_aids.security.filter.AIRequestFilter;
 import com.example.dr_aids.security.filter.CustomLogoutFilter;
@@ -35,18 +36,19 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshRepository;
     private final AIRequestFilter aiRequestFilter;
-    @Value("${ai.whitelist-paths}")
-    private List<String> aiWhitelistPaths;
+
+    private final AIProperties aiProperties;
 
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
                           RefreshTokenRepository refreshTokenRepository, UserRepository userRepository,
-                           AIRequestFilter aiRequestFilter) {
+                           AIRequestFilter aiRequestFilter, AIProperties aiProperties) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshTokenRepository;
         this.userRepository = userRepository;
         this.aiRequestFilter = aiRequestFilter;
+        this.aiProperties = aiProperties;
     }
 
     @Bean
@@ -91,16 +93,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/login", "/join", "/reissue",
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
+                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**",
+
+                                // AI 경로 화이트리스트
+                                "/patient/list/ai",
+                                "/prescriptions/ai",
+                                "/blood-test/ai"
                         ).permitAll()
                         .anyRequest().authenticated() //개발 중
                 );
         // JWT 필터 & 커스텀 필터 설정
-        http.addFilterBefore(aiRequestFilter, JWTFilter.class); // 먼저 AI 필터 실행
-        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
-        http.addFilterBefore(new JWTFilter(jwtUtil, userRepository, aiWhitelistPaths), LoginFilter.class);
+        http.addFilterBefore(aiRequestFilter, UsernamePasswordAuthenticationFilter.class);// 먼저 AI 필터 실행
+        http.addFilterBefore(new JWTFilter(jwtUtil, userRepository, aiProperties.getWhitelistPaths()), LoginFilter.class);
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository),
                 UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+
+
 
         return http.build();
     }

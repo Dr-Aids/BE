@@ -1,24 +1,22 @@
 package com.example.dr_aids.security.filter;
 
+import com.example.dr_aids.security.common.AIProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
-
+@RequiredArgsConstructor
 @Component
 public class AIRequestFilter extends OncePerRequestFilter {
 
-    @Value("${ai.api.key}")
-    private String aiApiKey;
-
-    @Value("${ai.api.whitelist-paths}")
-    private List<String> aiPathList;
+    private final AIProperties aiProperties;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -28,10 +26,10 @@ public class AIRequestFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (aiPathList.contains(path)) {
+        if (aiProperties.getWhitelistPaths().contains(path)) {
             String header = request.getHeader("Authorization");
 
-            if (header == null || !header.equals("ApiKey " + aiApiKey)) {
+            if (header == null || !header.equals("ApiKey " + aiProperties.getKey())) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API Key");
                 return;
             }
@@ -46,6 +44,6 @@ public class AIRequestFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // AI 경로가 아니면 필터 작동 안 함
         String path = request.getRequestURI();
-        return !aiPathList.contains(path);
+        return !aiProperties.getWhitelistPaths().contains(path);
     }
 }
