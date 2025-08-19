@@ -19,11 +19,31 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
     private final List<String> aiWhitelistPaths;
+
+    // Swagger, 로그인, 회원가입, AI 경로는 JWT 인증 제외
+    private final Set<String> excludePaths = Set.of(
+            "/login",
+            "/join",
+            "/reissue",
+            "/swagger-ui.html",
+            "/swagger-ui/index.html",
+            "/swagger-ui/",
+            "/v3/api-docs",
+            "/v3/api-docs/",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/webjars/",
+            "/webjars/**",
+            "/favicon.ico"
+    );
+
 
     public JWTFilter(JWTUtil jwtUtil, UserRepository userRepository, List<String> aiWhitelistPaths) {
         this.jwtUtil = jwtUtil;
@@ -34,7 +54,8 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return aiWhitelistPaths.contains(path); // AI 경로면 JWT 인증 스킵
+
+        return excludePaths.contains(path) || aiWhitelistPaths.contains(path);
     }
 
     @Override
