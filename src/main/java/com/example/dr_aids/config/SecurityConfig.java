@@ -1,11 +1,13 @@
 package com.example.dr_aids.config;
 
 import com.example.dr_aids.security.common.JWTUtil;
+import com.example.dr_aids.security.filter.AIRequestFilter;
 import com.example.dr_aids.security.filter.CustomLogoutFilter;
 import com.example.dr_aids.security.filter.JWTFilter;
 import com.example.dr_aids.security.filter.LoginFilter;
 import com.example.dr_aids.security.repository.RefreshTokenRepository;
 import com.example.dr_aids.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +24,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -31,13 +34,19 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshRepository;
+    private final AIRequestFilter aiRequestFilter;
+    @Value("${ai.whitelist-paths}")
+    private List<String> aiWhitelistPaths;
+
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
-                          RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+                          RefreshTokenRepository refreshTokenRepository, UserRepository userRepository,
+                           AIRequestFilter aiRequestFilter) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshTokenRepository;
         this.userRepository = userRepository;
+        this.aiRequestFilter = aiRequestFilter;
     }
 
     @Bean
@@ -84,11 +93,12 @@ public class SecurityConfig {
                                 "/login", "/join", "/reissue",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
                         ).permitAll()
-                        .anyRequest().permitAll() //개발 중
+                        .anyRequest().authenticated() //개발 중
                 );
         // JWT 필터 & 커스텀 필터 설정
+        http.addFilterBefore(aiRequestFilter, JWTFilter.class); // 먼저 AI 필터 실행
         http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
-        http.addFilterBefore(new JWTFilter(jwtUtil, userRepository), LoginFilter.class);
+        http.addFilterBefore(new JWTFilter(jwtUtil, userRepository, aiWhitelistPaths), LoginFilter.class);
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository),
                 UsernamePasswordAuthenticationFilter.class);
 

@@ -10,6 +10,7 @@ import com.example.dr_aids.patient.domain.*;
 import com.example.dr_aids.patient.domain.requestDto.PatientInfoRequestDto;
 import com.example.dr_aids.patient.domain.requestDto.PatientVisitindRequestDto;
 import com.example.dr_aids.patient.domain.responseDto.PatientInfoResponseDto;
+import com.example.dr_aids.patient.domain.responseDto.PatientListByAIResponse;
 import com.example.dr_aids.patient.domain.responseDto.PatientListResponseDto;
 import com.example.dr_aids.patient.repository.PatientRepository;
 import com.example.dr_aids.user.domain.User;
@@ -56,23 +57,23 @@ public class PatientService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
         // 수정할 필드만 반영
-        if (patientInfoRequestDto.getName() != null) {
+        if (patientInfoRequestDto.getName() != null && !patientInfoRequestDto.getName().isBlank()) {
             patient.setName(patientInfoRequestDto.getName());
         }
-        if (patientInfoRequestDto.getAge() != null) {
+        if (patientInfoRequestDto.getAge() != null && patientInfoRequestDto.getAge() > 0) {
             patient.setAge(patientInfoRequestDto.getAge());
         }
         if (patientInfoRequestDto.getBirth() != null) {
             patient.setBirth(patientInfoRequestDto.getBirth());
         }
-        if (patientInfoRequestDto.getGender() != null) {
+        if (patientInfoRequestDto.getGender() != null && !patientInfoRequestDto.getGender().isBlank()) {
             patient.setGender(patientInfoRequestDto.getGender());
         }
-        if (patientInfoRequestDto.getDisease() != null) {
+        if (patientInfoRequestDto.getDisease() != null && !patientInfoRequestDto.getDisease().isBlank()) {
             patient.setDisease(patientInfoRequestDto.getDisease());
         }
 
-        if( patientInfoRequestDto.getPIC() != null) {
+        if( patientInfoRequestDto.getPIC() != null && !patientInfoRequestDto.getPIC().isBlank()) {
             User doctor = userRepository.findByUsername(patientInfoRequestDto.getPIC())
                     .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
 
@@ -162,4 +163,13 @@ public class PatientService {
         patientRepository.save(patient);
     }
 
+    public List<PatientListByAIResponse> getPatientListByAi() {
+        List<Patient> patients = patientRepository.findAll();
+
+        return patients.stream()
+                .map(patient -> PatientListByAIResponse.builder()
+                        .id(patient.getId())
+                        .build())
+                .toList();
+    }
 }

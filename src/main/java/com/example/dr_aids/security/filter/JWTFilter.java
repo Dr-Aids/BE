@@ -17,15 +17,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Optional;
 
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
+    private final List<String> aiWhitelistPaths;
 
-    public JWTFilter(JWTUtil jwtUtil, UserRepository userRepository){
+    public JWTFilter(JWTUtil jwtUtil, UserRepository userRepository, List<String> aiWhitelistPaths){
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.aiWhitelistPaths = aiWhitelistPaths;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return aiWhitelistPaths.contains(path); // AI 경로면 JWT 인증 스킵
     }
 
     @Override
