@@ -53,31 +53,34 @@ public class SpecialNoteService {
         DialysisSession previousSession = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), dialysisSession.getSession() -1)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIALYSIS_SESSION_NOT_FOUND));
 
+        if(previousSession.getWeight().getPostWeight() != null && sessionSaveRequestDto.getPreWeight() != null) {
+            double GapBetweenPrePostWeight = previousSession.getWeight().getPostWeight() - sessionSaveRequestDto.getPreWeight();
+            // 이전 투석 후 몸무게보다 증가 (기준 3.5kg 이상)
+            if(GapBetweenPrePostWeight >= 3.5){
+                SpecialNote specialNote = SpecialNote.builder()
+                        .type("weight")
+                        .value(GapBetweenPrePostWeight)
+                        .ruleName("PREV_DIFF_OVER_3.5KG")
+                        .build();
 
-        double GapBetweenPrePostWeight = previousSession.getWeight().getPostWeight() - sessionSaveRequestDto.getPreWeight();
-        double GapBetweenAvgWeight = patient.getAverageWeight() - sessionSaveRequestDto.getPreWeight();
-
-        // 이전 투석 후 몸무게보다 증가 (기준 3.5kg 이상)
-        if(GapBetweenPrePostWeight >= 3.5){
-            SpecialNote specialNote = SpecialNote.builder()
-                    .type("weight")
-                    .value(GapBetweenPrePostWeight)
-                    .ruleName("PREV_DIFF_OVER_3.5KG")
-                    .build();
-
-            specialNote.setDialysisSession(dialysisSession);
-            specialNoteRepository.save(specialNote);
+                specialNote.setDialysisSession(dialysisSession);
+                specialNoteRepository.save(specialNote);
+            }
         }
-        // 내원 시 평균 몸무게보다 증가 (1kg 이상 차이)
-        if(GapBetweenAvgWeight >= 1.0){
-            SpecialNote specialNote = SpecialNote.builder()
-                    .type("weight")
-                    .value(GapBetweenAvgWeight)
-                    .ruleName("AVG_DIFF_OVER_1KG")
-                    .build();
 
-            specialNote.setDialysisSession(dialysisSession);
-            specialNoteRepository.save(specialNote);
+        if(patient.getAverageWeight() != null && sessionSaveRequestDto.getPreWeight() != null) {
+            double GapBetweenAvgWeight = patient.getAverageWeight() - sessionSaveRequestDto.getPreWeight();
+            // 내원 시 평균 몸무게보다 증가 (1kg 이상 차이)
+            if (GapBetweenAvgWeight >= 1.0) {
+                SpecialNote specialNote = SpecialNote.builder()
+                        .type("weight")
+                        .value(GapBetweenAvgWeight)
+                        .ruleName("AVG_DIFF_OVER_1KG")
+                        .build();
+
+                specialNote.setDialysisSession(dialysisSession);
+                specialNoteRepository.save(specialNote);
+            }
         }
     }
 

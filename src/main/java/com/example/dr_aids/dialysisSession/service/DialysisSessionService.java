@@ -48,8 +48,8 @@ public class DialysisSessionService {
                 .preWeight(sessionSaveRequestDto.getPreWeight())
                 .dryWeight(sessionSaveRequestDto.getDryWeight())
                 .targetUF(sessionSaveRequestDto.getTargetUF())
+                .postWeight(null)
                 .build();
-
 
         // 몸무게 정보와 DialysisSession 연결
         dialysisSession.setWeight(weight);
