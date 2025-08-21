@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.List.of;
+
 @Service
 @AllArgsConstructor
 public class HospitalService {
@@ -40,6 +42,20 @@ public class HospitalService {
         List<Hospital> hospitals = hospitalRepository.findAllByHospitalName(hospitalName);
         if (hospitals.isEmpty()) {
             throw new CustomException(ErrorCode.HOSPITAL_NOT_FOUND);
+        }
+
+        return hospitals.stream().map(
+                hospital -> HospitalListDto.builder()
+                        .id(hospital.getId())
+                        .hospitalName(hospital.getHospitalName())
+                        .build()
+        ).toList();
+    }
+
+    public List<HospitalListDto> getAllHospitals() {
+        List<Hospital> hospitals = hospitalRepository.findAll();
+        if (hospitals.isEmpty()) {
+            return List.of(); // 빈 리스트 반환
         }
 
         return hospitals.stream().map(

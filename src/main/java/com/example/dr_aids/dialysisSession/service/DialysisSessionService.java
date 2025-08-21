@@ -48,8 +48,8 @@ public class DialysisSessionService {
                 .preWeight(sessionSaveRequestDto.getPreWeight())
                 .dryWeight(sessionSaveRequestDto.getDryWeight())
                 .targetUF(sessionSaveRequestDto.getTargetUF())
+                .postWeight(null)
                 .build();
-
 
         // 몸무게 정보와 DialysisSession 연결
         dialysisSession.setWeight(weight);
@@ -62,6 +62,19 @@ public class DialysisSessionService {
 
         return dialysisSession;
     }
+
+    public void deleteDialysisSessionInfo(Long patientId, Long sessionId){
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
+
+        DialysisSession dialysisSession = dialysisSessionRepository.findByPatient_IdAndSession(patientId, sessionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SESSION_NOT_FOUND));
+
+        patient.getDialysisSessions().remove(dialysisSession);
+
+        dialysisSessionRepository.delete(dialysisSession);
+    }
+
     public List<SessionInfoResponseDto> getDialysisSessionInfo(Long id){
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));

@@ -34,6 +34,20 @@ public interface DialysisSessionControllerDocs {
     )
     ResponseEntity<?> addDialysisSessionInfo(@RequestBody SessionSaveRequestDto dto);
 
+    @Operation(
+            summary = "환자 투석 회차 정보 삭제",
+            description = "특정 환자의 투석 회차 정보를 삭제합니다.",
+            parameters = {
+                    @Parameter(name = "patientId", description = "환자 ID", required = true),
+                    @Parameter(name = "sessionId", description = "삭제할 회차 번호", required = true)
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "투석 회차 삭제 성공",
+                            content = @Content(schema = @Schema(example = "{\"message\": \"투석 회차 정보가 삭제되었습니다.\"}")))
+            }
+    )
+    ResponseEntity<?> deleteDialysisSessionInfo(@PathVariable Long patientId, @PathVariable Long sessionId);
+
     @Operation(summary = "환자의 투석 회차 정보 조회", description = "환자의 모든 투석 회차 일자 정보를 조회합니다.")
     @ApiResponse(responseCode = "200", description = "투석 회차 조회 성공",
             content = @Content(schema = @Schema(implementation = SessionInfoResponseDto.class)))

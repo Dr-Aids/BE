@@ -53,4 +53,18 @@ public class HospitalController {
     public ResponseEntity<?> getHospitalByHospitalName(@RequestParam(name = "hospitalName") String hospitalName) {
         return ResponseEntity.ok(hospitalService.getHospitalByName(hospitalName));
     }
+
+    @Operation(
+            summary = "병원 목록 조회",
+            description = "등록된 모든 병원 목록을 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "병원 목록 조회 성공",
+                            content = @Content(schema = @Schema(implementation = HospitalListDto.class)))
+            }
+    )
+    @GetMapping("/list")
+    public ResponseEntity<?> getAllHospitals() {
+        return ResponseEntity.ok(hospitalService.getAllHospitals());
+    }
+
 }
