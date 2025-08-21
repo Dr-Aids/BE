@@ -29,6 +29,12 @@ public class DialysisSessionController implements DialysisSessionControllerDocs 
 
         return ResponseEntity.ok("투석 회차 정보가 추가되었습니다.");
     }
+
+    @DeleteMapping("/{patientId}/{sessionId}") // 환자 투석 회차 정보 삭제
+    public ResponseEntity<?> deleteDialysisSessionInfo(@PathVariable Long patientId, @PathVariable Long sessionId) {
+        dialysisSessionService.deleteDialysisSessionInfo(patientId, sessionId);
+        return ResponseEntity.ok("투석 회차 정보가 삭제되었습니다.");
+    }
     @GetMapping("/{id}") // 환자의 투석 회차 조회
     public ResponseEntity<?> getPatientSessionInfo(@PathVariable Long id) {
         return ResponseEntity.ok(dialysisSessionService.getDialysisSessionInfo(id));
