@@ -17,6 +17,7 @@ import com.example.dr_aids.specialNote.repository.SpecialNoteRepository;
 import com.example.dr_aids.user.domain.User;
 import com.example.dr_aids.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import java.util.Objects;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class SpecialNoteService {
     private final SpecialNoteRepository specialNoteRepository;
     private final PatientRepository patientRepository;
@@ -53,8 +55,9 @@ public class SpecialNoteService {
         DialysisSession previousSession = dialysisSessionRepository.findByPatient_IdAndSession(patient.getId(), dialysisSession.getSession() -1)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIALYSIS_SESSION_NOT_FOUND));
 
+        log.info(sessionSaveRequestDto.getPreWeight() + " / " + previousSession.getWeight().getPostWeight());
         if(previousSession.getWeight().getPostWeight() != null && sessionSaveRequestDto.getPreWeight() != null) {
-            double GapBetweenPrePostWeight = previousSession.getWeight().getPostWeight() - sessionSaveRequestDto.getPreWeight();
+            double GapBetweenPrePostWeight = sessionSaveRequestDto.getPreWeight() - previousSession.getWeight().getPostWeight();
             // 이전 투석 후 몸무게보다 증가 (기준 3.5kg 이상)
             if(GapBetweenPrePostWeight >= 3.5){
                 SpecialNote specialNote = SpecialNote.builder()

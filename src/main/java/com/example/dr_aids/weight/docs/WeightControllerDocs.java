@@ -28,11 +28,10 @@ public interface WeightControllerDocs {
     @Operation(
             summary = "체중 정보 삭제",
             description = "회차별 환자의 체중 정보를 삭제합니다.",
-            requestBody = @RequestBody(
-                    description = "삭제할 체중 정보 요청 DTO",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = WeightRequestDto.class))
-            )
+            parameters = {
+                    @io.swagger.v3.oas.annotations.Parameter(name = "patientId", description = "환자 ID", required = true),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "session", description = "세션 회차", required = true)
+            }
     )
     @ApiResponse(responseCode = "200", description = "체중 정보 삭제 성공",
             content = @Content(schema = @Schema(example = "{\"message\": \"체중 정보가 삭제되었습니다.\"}")))
