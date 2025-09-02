@@ -22,15 +22,21 @@ public interface SpecialNoteRepository extends JpaRepository<SpecialNote, Long> 
     );
 
     @Query(value = """
-    SELECT sn.* FROM special_note sn
-    JOIN dialysis_session ds ON sn.dialysis_session_id = ds.id
-    WHERE ds.patient_id = :patientId
-    AND ds.session IN (
-        SELECT session FROM dialysis_session
+    SELECT sn.*
+    FROM special_note sn
+    JOIN dialysis_session ds
+      ON sn.dialysis_session_id = ds.id
+    JOIN (
+        SELECT id
+        FROM dialysis_session
         WHERE patient_id = :patientId
         ORDER BY session DESC
         LIMIT 2
-    ) """, nativeQuery = true) // 환자의 최근 두 회차 투석에 대한 특이사항 조회
+    ) recent
+      ON recent.id = ds.id
+    WHERE ds.patient_id = :patientId
+    """, nativeQuery = true)
     List<SpecialNote> findRecentTwoSessionsNotesByPatientId(@Param("patientId") Long patientId);
+
 
 }
