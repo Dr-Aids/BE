@@ -21,9 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -166,35 +164,62 @@ public class SpecialNoteService {
 
 
     // 환자별 최근 2회 특이사항 조회
-    public List<SpecialNotePatientDto> getRecentTwoSpecialNotes(Long patientId) {
-        List<SpecialNote> specialNotes = specialNoteRepository.findRecentTwoSessionsNotesByPatientId(patientId);
+    public List<SpecialNotePatientDto> getRecentTwoSpecialNotes(Long patientId, Long currentSession) {
 
-        // sessionId 기준으로 그룹화
-        Map<Long, List<SpecialNote>> groupedBySession = specialNotes.stream()
-                .collect(Collectors.groupingBy(note -> note.getDialysisSession().getId()));
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        // 그룹화된 데이터를 DTO로 변환
-        return groupedBySession.values().stream()
-                .map(notes -> {
-                    DialysisSession session = notes.get(0).getDialysisSession();
+        // 1) 대상 회차 2개 선정 (currentSession 이하)
+        List<DialysisSession> targetSessions = patient.getDialysisSessions().stream()
+                .filter(ds -> currentSession == null || ds.getSession() <= currentSession)
+                .sorted(Comparator.comparing(DialysisSession::getSession).reversed())
+                .limit(2)
+                .toList();
+
+        if (targetSessions.isEmpty()) {
+            return List.of();
+        }
+
+        // 2) 해당 회차들의 특이사항만 조회 (네이티브 쿼리: currentSession 이하 최신 2회)
+        //    이미 히동맨이 만들어 둔 쿼리 이용
+        List<SpecialNote> specialNotes =
+                specialNoteRepository.findRecentTwoSessionsNotesByPatientIdAndCurrentSession(patientId, currentSession);
+
+        // 3) 세션ID -> 특이사항 리스트 맵
+        Map<Long, List<SpecialNote>> notesBySessionId = specialNotes.stream()
+                .collect(Collectors.groupingBy(sn -> sn.getDialysisSession().getId()));
+
+        // 4) 대상 회차 각각에 대해 DTO 생성 (특이사항이 없어도 빈 배열로 반환)
+        return targetSessions.stream()
+                .map(session -> {
+                    List<SpecialNote> notes = notesBySessionId.getOrDefault(session.getId(), Collections.emptyList());
+
+                    Long sbp = (session.getBloodPressures() == null || session.getBloodPressures().isEmpty())
+                            ? null : session.getBloodPressures().get(0).getSBP();
+                    Long dbp = (session.getBloodPressures() == null || session.getBloodPressures().isEmpty())
+                            ? null : session.getBloodPressures().get(0).getDBP();
+                    Double preWeight = (session.getWeight() == null) ? null : session.getWeight().getPreWeight();
 
                     return SpecialNotePatientDto.builder()
                             .session(session.getSession())
-                            .date(session.getDate().toString())
-                            .sbp(session.getBloodPressures().isEmpty() ? null : session.getBloodPressures().get(0).getSBP())
-                            .dbp(session.getBloodPressures().isEmpty() ? null : session.getBloodPressures().get(0).getDBP())
-                            .preWeight(session.getWeight().getPreWeight())
-                            .specialNotes(notes.stream()
-                                    .map(note -> SpecialNoteDto.builder()
-                                            .id(note.getId())
-                                            .type(note.getType())
-                                            .ruleName(note.getRuleName())
-                                            .value(note.getValue())
-                                            .build())
-                                    .toList()
+                            .date(session.getDate() != null ? session.getDate().toString() : null)
+                            .sbp(sbp)
+                            .dbp(dbp)
+                            .preWeight(preWeight)
+                            .specialNotes(
+                                    notes.stream()
+                                            .map(note -> SpecialNoteDto.builder()
+                                                    .id(note.getId())
+                                                    .type(note.getType())
+                                                    .ruleName(note.getRuleName())
+                                                    .value(note.getValue())
+                                                    .build())
+                                            .toList()
                             )
                             .build();
                 })
+                // 응답도 회차 내림차순 정렬 유지
+                .sorted(Comparator.comparing(SpecialNotePatientDto::getSession).reversed())
                 .toList();
     }
 
