@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -167,9 +169,14 @@ public class SpecialNoteService {
     public List<SpecialNotePatientDto> getRecentTwoSpecialNotes(Long patientId) {
         List<SpecialNote> specialNotes = specialNoteRepository.findRecentTwoSessionsNotesByPatientId(patientId);
 
-        return specialNotes.stream()
-                .map(note -> {
-                    DialysisSession session = note.getDialysisSession();
+        // sessionId 기준으로 그룹화
+        Map<Long, List<SpecialNote>> groupedBySession = specialNotes.stream()
+                .collect(Collectors.groupingBy(note -> note.getDialysisSession().getId()));
+
+        // 그룹화된 데이터를 DTO로 변환
+        return groupedBySession.values().stream()
+                .map(notes -> {
+                    DialysisSession session = notes.get(0).getDialysisSession();
 
                     return SpecialNotePatientDto.builder()
                             .session(session.getSession())
@@ -177,12 +184,15 @@ public class SpecialNoteService {
                             .sbp(session.getBloodPressures().isEmpty() ? null : session.getBloodPressures().get(0).getSBP())
                             .dbp(session.getBloodPressures().isEmpty() ? null : session.getBloodPressures().get(0).getDBP())
                             .preWeight(session.getWeight().getPreWeight())
-                            .specialNoteDto(SpecialNoteDto.builder()
-                                    .id(note.getId())
-                                    .type(note.getType())
-                                    .ruleName(note.getRuleName())
-                                    .value(note.getValue())
-                                    .build())
+                            .specialNotes(notes.stream()
+                                    .map(note -> SpecialNoteDto.builder()
+                                            .id(note.getId())
+                                            .type(note.getType())
+                                            .ruleName(note.getRuleName())
+                                            .value(note.getValue())
+                                            .build())
+                                    .toList()
+                            )
                             .build();
                 })
                 .toList();

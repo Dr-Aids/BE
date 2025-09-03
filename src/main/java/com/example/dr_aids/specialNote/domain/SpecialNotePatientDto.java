@@ -4,6 +4,8 @@ import com.example.dr_aids.bloodpressure.domain.responseDto.BloodPressureDto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class SpecialNotePatientDto {
@@ -14,6 +16,6 @@ public class SpecialNotePatientDto {
     private Long dbp;
     private Double preWeight;
 
-    private SpecialNoteDto specialNoteDto; // 특이사항 DTO
+    private List<SpecialNoteDto> specialNotes; // 특이사항 DTO
 
 }
