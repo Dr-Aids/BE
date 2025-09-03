@@ -15,6 +15,7 @@ import com.example.dr_aids.weight.domain.Weight;
 import com.example.dr_aids.weight.domain.responseDto.WeightDetailDto;
 import com.example.dr_aids.weight.domain.responseDto.WeightTrendDto;
 import com.example.dr_aids.weight.repository.WeightRepository;
+import com.example.dr_aids.weight.service.WeightService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class DialysisSessionService {
     private final PatientRepository patientRepository;
     private final DialysisSessionRepository dialysisSessionRepository;
     private final WeightRepository weightRepository;
+    private final WeightService weightService;
 
     public DialysisSession addDialysisSessionInfo(SessionSaveRequestDto sessionSaveRequestDto) {
         Patient patient = patientRepository.findById(sessionSaveRequestDto.getPatientId())
@@ -54,6 +56,8 @@ public class DialysisSessionService {
         // 몸무게 정보와 DialysisSession 연결
         dialysisSession.setWeight(weight);
         patient.getDialysisSessions().add(dialysisSession);
+
+        patient.setAverageWeight(weightService.calculateAverageWeight(patient));
 
         // 평균 체중 계산 및 환자 정보 업데이트
         weightRepository.save(weight);
