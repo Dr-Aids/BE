@@ -28,12 +28,13 @@ public class SpecialNoteController implements SpecialNoteDocs {
         return ResponseEntity.ok(specialNoteService.getAllSpecialNotes(userDetails.getUser()));
     }
 
-    @GetMapping("/patient/{patientId}")
+    @GetMapping("/patient/{patientId}/{currentSession}")
     public ResponseEntity<?> getSpecialNotesByPatientId(
-            @PathVariable("patientId") Long patientId) {
+            @PathVariable("patientId") Long patientId,
+            @PathVariable("currentSession") Long currentSession) {
 
         return ResponseEntity.ok(
-                specialNoteService.getRecentTwoSpecialNotes(patientId)
+                specialNoteService.getRecentTwoSpecialNotes(patientId, currentSession)
         );
     }
 

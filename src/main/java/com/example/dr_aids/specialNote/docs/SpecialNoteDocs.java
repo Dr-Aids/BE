@@ -42,7 +42,8 @@ public interface SpecialNoteDocs {
             summary = "환자별 최근 2회 특이사항 조회",
             description = "특정 환자의 최근 2회 투석 회차에 대한 특이사항 및 주요 지표(SBP/DBP, 전 체중 등)를 조회합니다.",
             parameters = {
-                    @Parameter(name = "patientId", description = "환자 ID", required = true, example = "1")
+                    @Parameter(name = "patientId", description = "환자 ID", required = true, example = "1"),
+                    @Parameter(name = "currentSession", description = "현재 투석 세션 ID", required = true, example = "10")
             },
             responses = {
                     @ApiResponse(
@@ -54,6 +55,7 @@ public interface SpecialNoteDocs {
             }
     )
     ResponseEntity<?> getSpecialNotesByPatientId(
-            @PathVariable("patientId") Long patientId
+            @PathVariable("patientId") Long patientId,
+            @PathVariable("currentSession") Long currentSession
     );
 }
